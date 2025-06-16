@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Detectives Literarios CCP</title>
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #d9f0d8;
+    color: #2e5d22;
+    position: relative;
+    overflow-x: hidden;
+  }
+  header {
+    background-color: #7ebf7e;
+    text-align: center;
+    padding: 30px 20px;
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #245012;
+  }
+  main {
+    padding: 20px;
+    text-align: center;
+    max-width: 700px;
+    margin: auto;
+  }
+  .logo-institucion {
+    width: 140px;
+    margin: 20px 0;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+  }
+  .texto-bienvenida {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  button.social, button.section {
+    background-color: #67a467;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 5px;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  button.social:disabled, button.social[disabled] {
+    background-color: #b9d3b9;
+    cursor: default;
+  }
+  button.social:hover:not([disabled]) {
+    background-color: #4f854f;
+  }
+  .logo-escudo {
+    width: 120px;
+    margin: 25px auto;
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  footer {
+    background-color: #7ebf7e;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-weight: 600;
+    margin-top: 50px;
+    font-size: 1rem;
+  }
+  /* Animación de emojis solo en botones */
+  .emoji-mov {
+    display: inline-block;
+    animation: emojiBounce 2.5s ease-in-out infinite;
+  }
+  @keyframes emojiBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  #fondoCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+</style>
+</head>
+<body>
+<canvas id="fondoCanvas"></canvas>
+
+<header>Detectives Literarios CCP</header>
+
+<main>
+  <img
+    src="https://i.ibb.co/SXpJdP74/01.jpg"
+    alt="Logo Institución Educativa"
+    class="logo-institucion"
+  />
+  <p class="texto-bienvenida">
+    📚 Bienvenid@ a nuestra aventura literaria,
+    donde las palabras esconden misterios por descubrir. Explora y conéctate con
+    nosotros 🖊️🌐
+  </p>
+  <div>
+    <button class="social" onclick="window.open('https://www.instagram.com/detectives_literarios/', '_blank')">
+      <span class="emoji-mov">📸</span> Instagram
+    </button>
+    <button class="social" onclick="window.open('https://www.facebook.com/profile.php?id=61577592861536', '_blank')">
+      <span class="emoji-mov">📘</span> Facebook
+    </button>
+    <button class="social" onclick="window.open('https://www.tiktok.com/@detectivesliterarios', '_blank')">
+      <span class="emoji-mov">▶️</span> TikTok
+    </button>
+  </div>
+
+  <img
+    src="https://i.ibb.co/wN4XVsgN/institucion.jpg"
+    alt="Escudo Institución"
+    class="logo-escudo"
+  />
+
+  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 20px;">
+    <button class="section"><span class="emoji-mov">📖</span> Página de libros</button>
+    <button class="section"><span class="emoji-mov">📚</span> Explora nuestros libros</button>
+    <button class="section"><span class="emoji-mov">💡</span> Investigación Literaria</button>
+  </div>
+</main>
+
+<footer>
+  Hecho por WhitheItsBlak <br />
+  Organizadora del proyecto Jazmin Muños Narvaes
+</footer>
+
+<script>
+  const canvas = document.getElementById("fondoCanvas");
+  const ctx = canvas.getContext("2d");
+  let width, height;
+
+  const colors = ["rgba(102, 187, 106, 0.3)", "rgba(27, 94, 32, 0.5)"];
+  const particles = [];
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.radius = Math.random() * 2 + 1;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+    }
+    move() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x > width) this.x = 0;
+      if (this.x < 0) this.x = width;
+      if (this.y > height) this.y = 0;
+      if (this.y < 0) this.y = height;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+  }
+
+  function initParticles(num) {
+    particles.length = 0;
+    for (let i = 0; i < num; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach((p) => {
+      p.move();
+      p.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("resize", () => {
+    resize();
+    initParticles(100);
+  });
+
+  resize();
+  initParticles(100);
+  animate();
+</script>
+</body>
+</html>
