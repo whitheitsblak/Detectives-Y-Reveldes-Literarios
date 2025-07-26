@@ -3,93 +3,559 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Detectives Y Reveldes Literarios</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<title>Detectives Y Rebeldes Literarios</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body {
+  * {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #d9f0d8;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #a8e6a3 0%, #d4f1d0 50%, #e8f8e6 100%);
     color: #2e5d22;
     position: relative;
     overflow-x: hidden;
+    min-height: 100vh;
   }
+
+  /* Header mejorado */
   header {
-    background-color: #7ebf7e;
+    background: linear-gradient(135deg, #4caf50, #66bb6a, #81c784);
     text-align: center;
-    padding: 30px 20px;
-    font-weight: bold;
-    font-size: 5vw;
-    color: #245012;
-    font-family: 'Pacifico', cursive;
-    word-break: break-word;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
   }
-  @media (min-width: 600px) {
-    header {
-      font-size: 2.5rem;
+  
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  .header-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: white;
+    font-family: 'Pacifico', cursive;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 2;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  
+  .typewriter {
+    display: inline-block;
+    border-right: 3px solid rgba(255,255,255,0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 4s steps(30, end), blink 1s infinite 4s, removeCursor 0s 6s forwards;
+  }
+  
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  @keyframes blink {
+    0%, 50% { border-color: rgba(255,255,255,0.8) }
+    51%, 100% { border-color: transparent }
+  }
+  
+  @keyframes removeCursor {
+    to { border-right: none; }
+  }
+  
+  .header-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Main content */
+  main {
+    padding: 40px 20px;
+    text-align: center;
+    max-width: 900px;
+    margin: auto;
+    position: relative;
+  }
+
+  /* Cards con flip effect */
+  .flip-card {
+    background-color: transparent;
+    width: 100%;
+    height: 200px;
+    perspective: 1000px;
+    margin: 20px 0;
+  }
+  
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+  
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+  
+  .flip-card-front {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .flip-card-back {
+    background: linear-gradient(135deg, #4caf50, #66bb6a);
+    color: white;
+    transform: rotateY(180deg);
+  }
+
+  /* Ondas de colores al hacer clic */
+  .click-wave {
+    position: fixed;
+    border-radius: 50%;
+    border: 3px solid rgba(76, 175, 80, 0.6);
+    pointer-events: none;
+    z-index: 1000;
+    animation: waveExpand 1s ease-out forwards;
+  }
+  
+  @keyframes waveExpand {
+    0% {
+      width: 0;
+      height: 0;
+      opacity: 1;
+    }
+    100% {
+      width: 300px;
+      height: 300px;
+      opacity: 0;
     }
   }
-  main {
-    padding: 20px;
+
+  /* Estrellas fugaces */
+  .shooting-star {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: linear-gradient(45deg, #4caf50, #81c784);
+    border-radius: 50%;
+    box-shadow: 0 0 10px #4caf50;
+    animation: shootingStar 3s linear forwards;
+    z-index: 1;
+  }
+  
+  @keyframes shootingStar {
+    0% {
+      transform: translateX(-100px) translateY(-100px);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px));
+      opacity: 0;
+    }
+  }
+
+  /* Burbujas de lectura */
+  .reading-bubble {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #2e7d32;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    pointer-events: none;
+    z-index: 1000;
+    animation: bubbleFloat 4s ease-out forwards;
+  }
+  
+  @keyframes bubbleFloat {
+    0% {
+      opacity: 0;
+      transform: translateY(50px) scale(0.8);
+    }
+    20% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    80% {
+      opacity: 1;
+      transform: translateY(-20px) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-100px) scale(0.8);
+    }
+  }
+
+  /* Aurora boreal literaria */
+  .aurora {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(76, 175, 80, 0.1) 25%, 
+      rgba(129, 199, 132, 0.15) 50%, 
+      rgba(165, 214, 167, 0.1) 75%, 
+      transparent 100%);
+    animation: auroraMove 15s linear infinite;
+  }
+  
+  @keyframes auroraMove {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Rastro de brillos que sigue al mouse */
+  .magic-trail {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #4caf50, transparent);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: trailFade 1s ease-out forwards;
+    z-index: 999;
+  }
+  
+  @keyframes trailFade {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
+
+  /* Explosión de partículas */
+  .explosion-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: #4caf50;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1000;
+    animation: explode 1.5s ease-out forwards;
+  }
+  
+  @keyframes explode {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
+
+  /* Frases motivacionales */
+  .motivational-quote {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    color: #2e7d32;
     text-align: center;
-    max-width: 700px;
-    margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    pointer-events: none;
+    z-index: 1001;
+    animation: quoteAppear 5s ease-in-out forwards;
+    max-width: 80%;
+    font-weight: 500;
   }
+  
+  @keyframes quoteAppear {
+    0%, 15% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px) scale(0.9);
+    }
+    20%, 80% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+    85%, 100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px) scale(0.9);
+    }
+  }
+
+  /* Contador de palabras */
+  .word-counter {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    z-index: 1002;
+    animation: counterPulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes counterPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Parallax multicapa */
+  .parallax-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 120%;
+    height: 120%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .magic-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #4caf50, transparent);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: magicFloat 2s ease-out forwards;
+    z-index: 1000;
+  }
+  
+  @keyframes magicFloat {
+    0% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0) translateY(-100px);
+    }
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  }
+
   .logo-institucion {
-    width: 140px;
+    width: 150px;
     margin: 20px 0;
-    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    filter: brightness(1.1);
   }
+  
+  .logo-institucion:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  }
+
   .texto-bienvenida {
-    font-size: 1rem;
-    margin-bottom: 20px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
   }
+
+  /* Botones mejorados */
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 30px 0;
+  }
+
   button.social, button.section {
-    background-color: #67a467;
+    background: linear-gradient(135deg, #4caf50, #66bb6a);
     border: none;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 1rem;
-    margin: 5px;
-    padding: 12px 25px;
-    border-radius: 8px;
+    padding: 15px 30px;
+    border-radius: 50px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    position: relative;
+    overflow: hidden;
   }
-  button.social:disabled, button.social[disabled] {
-    background-color: #b9d3b9;
-    cursor: default;
+  
+  button.social::before, button.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
   }
-  button.social:hover:not([disabled]) {
-    background-color: #4f854f;
+  
+  button.social:hover::before, button.section:hover::before {
+    left: 100%;
   }
+
+  button.social:hover, button.section:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+  }
+  
+  button.social:active, button.section:active {
+    transform: translateY(-1px) scale(1.02);
+  }
+
   .logo-escudo {
-    width: 120px;
-    margin: 25px auto;
+    width: 140px;
+    margin: 30px auto;
     display: block;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    transition: all 0.4s ease;
+    filter: brightness(1.1);
   }
+  
+  .logo-escudo:hover {
+    transform: scale(1.1) rotate(-3deg);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+  }
+
+  /* Sección de navegación mejorada */
+  .navigation-section {
+    margin-top: 40px;
+  }
+  
+  .navigation-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: #2e7d32;
+    font-weight: 700;
+  }
+
+  /* Footer mejorado */
   footer {
-    background-color: #7ebf7e;
+    background: linear-gradient(135deg, #2e7d32, #388e3c, #4caf50);
     color: white;
     text-align: center;
-    padding: 12px;
-    font-weight: 600;
-    margin-top: 50px;
-    font-size: 1rem;
+    padding: 30px 20px;
+    margin-top: 60px;
+    position: relative;
+    overflow: hidden;
   }
+  
+  footer::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+    animation: footerGlow 4s ease-in-out infinite alternate;
+  }
+  
+  @keyframes footerGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(180deg); }
+  }
+  
+  .footer-content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .footer-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  .footer-info {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+
+  /* Animaciones mejoradas */
   .emoji-mov {
     display: inline-block;
     animation: emojiBounce 2.5s ease-in-out infinite;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
   }
+  
   @keyframes emojiBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.1); }
   }
+
+  /* Partículas de fondo mejoradas */
   #fondoCanvas {
     position: fixed;
     top: 0;
@@ -97,64 +563,252 @@
     width: 100%;
     height: 100%;
     z-index: -1;
+    opacity: 0.6;
+  }
+
+  /* Efectos de carga */
+  .fade-in {
+    animation: fadeIn 1s ease-out forwards;
+    opacity: 0;
+  }
+  
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  
+  .slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  
+  @keyframes slideUp {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Responsive mejorado */
+  @media (max-width: 768px) {
+    .btn-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    button.social, button.section {
+      width: 280px;
+      justify-content: center;
+    }
+    
+    .card {
+      margin: 20px 10px;
+      padding: 25px 20px;
+    }
+
+    /* NUEVAS REGLAS PARA MÓVIL - Textos más pequeños */
+    .header-title {
+      font-size: clamp(1.2rem, 3.5vw, 2rem) !important;
+    }
+    
+    .header-subtitle {
+      font-size: 0.75rem !important;
+    }
+    
+    .texto-bienvenida {
+      font-size: 0.85rem !important;
+      line-height: 1.4;
+    }
+    
+    .navigation-section h3 {
+      font-size: 1rem !important;
+    }
+    
+    .flip-card-front h4,
+    .flip-card-back h4 {
+      font-size: 0.9rem !important;
+    }
+    
+    .flip-card-front p,
+    .flip-card-back p {
+      font-size: 0.75rem !important;
+    }
+    
+    .footer-title {
+      font-size: 0.9rem !important;
+    }
+    
+    .footer-info {
+      font-size: 0.7rem !important;
+    }
+    
+    button.social, button.section {
+      font-size: 0.8rem !important;
+      padding: 10px 20px;
+    }
+    
+    .word-counter {
+      font-size: 0.65rem !important;
+      padding: 5px 10px;
+    }
+    
+    .motivational-quote {
+      font-size: 0.75rem !important;
+      padding: 12px 18px;
+      max-width: 90%;
+    }
+    
+    .reading-bubble {
+      font-size: 0.6rem !important;
+    }
+  }
+
+  /* Efectos de hover personalizados */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-5px);
   }
 </style>
 </head>
 <body>
 <canvas id="fondoCanvas"></canvas>
+<div class="aurora"></div>
+<div class="word-counter">Palabras descubiertas: <span id="wordCount">0</span></div>
 
-<header><span class="emoji-mov">✨</span> Detectives Y Reveldes Literarios <span class="emoji-mov">✨</span></header>
+<header class="fade-in">
+  <h1 class="header-title">
+    <span class="emoji-mov">✨</span> 
+    <span class="typewriter">Detectives Y Rebeldes Literarios</span> 
+    <span class="emoji-mov">✨</span>
+  </h1>
+  <p class="header-subtitle">Donde las palabras cobran vida y los misterios esperan ser descubiertos</p>
+</header>
 
 <main>
-  <img
-    src="https://i.ibb.co/SXpJdP74/01.jpg"
-    alt="Logo Institución Educativa"
-    class="logo-institucion"
-  />
-  <p class="texto-bienvenida">
-    <span class="emoji-mov">📚</span> Bienvenid@ a nuestra aventura literaria,
-    donde las palabras esconden misterios por descubrir. Explora y conéctate con
-    nosotros <span class="emoji-mov">🖊️</span><span class="emoji-mov">🌐</span>
-  </p>
-  <div>
-    <button class="social" onclick="window.open('https://www.instagram.com/detectives_literarios/', '_blank')">
-      <span class="emoji-mov">📸</span> Instagram
-    </button>
-    <button class="social" onclick="window.open('https://www.facebook.com/profile.php?id=61577592861536', '_blank')">
-      <span class="emoji-mov">📘</span> Facebook
-    </button>
-    <button class="social" onclick="window.open('https://www.tiktok.com/@detectivesliterarios', '_blank')">
-      <span class="emoji-mov">▶️</span> TikTok
-    </button>
+  <div class="card slide-up crystal-distort" style="animation-delay: 0.2s;">
+    <img
+      src="https://i.ibb.co/SXpJdP74/01.jpg"
+      alt="Logo Institución Educativa"
+      class="logo-institucion hover-lift"
+    />
+    <p class="texto-bienvenida">
+      <span class="emoji-mov">📚</span> Bienvenid@ a nuestra aventura literaria,
+      donde cada página esconde secretos por descubrir y cada palabra tiene el poder de 
+      transportarte a mundos inexplorados. Únete a nuestra comunidad de exploradores literarios
+      <span class="emoji-mov">🖊️</span><span class="emoji-mov">🌐</span>
+    </p>
+    
+    <div class="btn-container">
+      <button class="social hover-lift" onclick="window.open('https://www.instagram.com/detectives_literarios/', '_blank')">
+        <span class="emoji-mov">📸</span> Instagram
+      </button>
+      <button class="social hover-lift" onclick="window.open('https://www.facebook.com/profile.php?id=61577592861536', '_blank')">
+        <span class="emoji-mov">📘</span> Facebook
+      </button>
+      <button class="social hover-lift" onclick="window.open('https://www.tiktok.com/@detectivesliterarios', '_blank')">
+        <span class="emoji-mov">▶️</span> TikTok
+      </button>
+    </div>
   </div>
 
-  <img
-    src="https://i.ibb.co/wN4XVsgN/institucion.jpg"
-    alt="Escudo Institución"
-    class="logo-escudo"
-  />
-
-  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 20px;">
-    <button class="section"><span class="emoji-mov">📖</span> Página de libros</button>
-    <button class="section"><span class="emoji-mov">📚</span> Explora nuestros libros</button>
-    <button class="section"><span class="emoji-mov">💡</span> Investigación Literaria</button>
+  <div class="card slide-up crystal-distort" style="animation-delay: 0.4s;">
+    <img
+      src="https://i.ibb.co/wN4XVsgN/institucion.jpg"
+      alt="Escudo Institución"
+      class="logo-escudo hover-lift"
+    />
+    
+    <div class="navigation-section">
+      <h3><span class="emoji-mov">🔍</span> Explora Nuestro Mundo Literario</h3>
+      
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <span class="emoji-mov" style="font-size: 2rem;">📖</span>
+              <h4>Biblioteca Virtual</h4>
+              <p>Descubre nuestra colección</p>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <h4>📚 Libros Disponibles</h4>
+              <p>Más de 500 títulos esperándote. Desde clásicos hasta novelas contemporáneas que desafiarán tu imaginación.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <span class="emoji-mov" style="font-size: 2rem;">📚</span>
+              <h4>Reseñas de Libros</h4>
+              <p>Opiniones de nuestros detectives</p>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <h4>🎭 Críticas Literarias</h4>
+              <p>Análisis profundos, reseñas honestas y recomendaciones personalizadas de nuestra comunidad lectora.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <span class="emoji-mov" style="font-size: 2rem;">💡</span>
+              <h4>Investigación Literaria</h4>
+              <p>Proyectos y análisis</p>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <h4>🔬 Proyectos Activos</h4>
+              <p>Investigaciones sobre géneros literarios, análisis de personajes y estudios temáticos dirigidos por estudiantes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 
-<footer>
-  Desarrollado por WhitheItsBlak <br />
-  <strong>Proyecto dirigido por:</strong> Jasmín Muñoz Narváez <br />
-  <strong>Docente de Castellano</strong> <br />
-  IEM Ciudad de Pasto - CCP <br />
-  <strong>Jornada:</strong> JM
+<footer class="fade-in" style="animation-delay: 0.6s;">
+  <div class="footer-content">
+    <div class="footer-title">
+      <span class="emoji-mov">🎓</span> Proyecto Educativo Literario
+    </div>
+    <div class="footer-info">
+      <strong>Desarrollado por:</strong> WhitheItsBlak<br />
+      <strong>Proyecto dirigido por:</strong> Jasmín Muñoz Narváez<br />
+      <strong>Docente de Castellano</strong><br />
+      IEM Ciudad de Pasto - CCP<br />
+      <strong>Jornada:</strong> JM
+    </div>
+  </div>
 </footer>
 
 <script>
+  // Canvas de fondo mejorado
   const canvas = document.getElementById("fondoCanvas");
   const ctx = canvas.getContext("2d");
   let width, height;
 
-  const colors = ["rgba(102, 187, 106, 0.3)", "rgba(27, 94, 32, 0.5)", "rgba(0, 200, 83, 0.4)", "rgba(129, 199, 132, 0.4)"];
+  const colors = [
+    "rgba(76, 175, 80, 0.3)",
+    "rgba(102, 187, 106, 0.4)", 
+    "rgba(129, 199, 132, 0.3)",
+    "rgba(165, 214, 167, 0.5)",
+    "rgba(200, 230, 201, 0.4)"
+  ];
   const particles = [];
 
   function resize() {
@@ -168,24 +822,34 @@
     constructor() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.radius = Math.random() * 2 + 1;
+      this.radius = Math.random() * 3 + 1;
       this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.speedX = (Math.random() - 0.5) * 0.3;
-      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.speedX = (Math.random() - 0.5) * 0.5;
+      this.speedY = (Math.random() - 0.5) * 0.5;
+      this.opacity = Math.random() * 0.5 + 0.2;
+      this.pulseSpeed = Math.random() * 0.02 + 0.01;
+      this.pulse = 0;
     }
+    
     move() {
       this.x += this.speedX;
       this.y += this.speedY;
+      this.pulse += this.pulseSpeed;
+      
       if (this.x > width) this.x = 0;
       if (this.x < 0) this.x = width;
       if (this.y > height) this.y = 0;
       if (this.y < 0) this.y = height;
     }
+    
     draw() {
+      const currentOpacity = this.opacity + Math.sin(this.pulse) * 0.2;
+      ctx.globalAlpha = currentOpacity;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulse) * 0.5, 0, Math.PI * 2);
       ctx.fillStyle = this.color;
       ctx.fill();
+      ctx.globalAlpha = 1;
     }
   }
 
@@ -205,14 +869,254 @@
     requestAnimationFrame(animate);
   }
 
+  // Efectos de conexión entre partículas
+  function drawConnections() {
+    particles.forEach((p1, i) => {
+      particles.slice(i + 1).forEach((p2) => {
+        const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+        if (distance < 150) {
+          ctx.globalAlpha = (150 - distance) / 150 * 0.1;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = "rgba(76, 175, 80, 0.5)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      });
+    });
+  }
+
+  function enhancedAnimate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach((p) => {
+      p.move();
+      p.draw();
+    });
+    drawConnections();
+    requestAnimationFrame(enhancedAnimate);
+  }
+
   window.addEventListener("resize", () => {
     resize();
-    initParticles(100);
+    initParticles(120);
   });
 
+  // Variables globales para efectos
+  let mouseX = 0, mouseY = 0;
+  let trailArray = [];
+  let wordCount = 0;
+  let quotesShown = 0;
+  
+  // Frases motivacionales literarias
+  const motivationalQuotes = [
+    "📚 'La lectura es el viaje de los que no pueden tomar el tren' - Francis de Croisset",
+    "✨ 'Un libro abierto es un cerebro que habla; cerrado, un amigo que espera'",
+    "🌟 'Leer es soñar con los ojos abiertos' - Anónimo",
+    "📖 'Los libros son espejos: solo se ve en ellos lo que uno ya lleva dentro'",
+    "🎭 'La literatura es el arte de descubrir algo extraordinario sobre gente ordinaria'",
+    "🌙 'Leer un buen libro es como conversar con las mejores mentes del pasado'"
+  ];
+
+  // Textos para burbujas de lectura
+  const readingBubbles = [
+    "Leyendo...", "Descubriendo...", "Explorando...", "Investigando...", 
+    "Analizando...", "Reflexionando...", "Imaginando...", "Creando..."
+  ];
+
+  // Efectos de mouse mejorados
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Rastro de brillos
+    if (Math.random() < 0.3) {
+      createMagicTrail(mouseX, mouseY);
+    }
+    
+    // Partícula mágica original (menos frecuente)
+    if (Math.random() < 0.05) {
+      createMagicParticle(mouseX, mouseY);
+    }
+  });
+
+  // Ondas al hacer clic
+  document.addEventListener('click', (e) => {
+    createClickWave(e.clientX, e.clientY);
+    createExplosion(e.clientX, e.clientY);
+    incrementWordCount();
+  });
+
+  // Funciones de efectos
+  function createClickWave(x, y) {
+    const wave = document.createElement('div');
+    wave.className = 'click-wave';
+    wave.style.left = (x - 150) + 'px';
+    wave.style.top = (y - 150) + 'px';
+    document.body.appendChild(wave);
+    
+    setTimeout(() => {
+      if (wave.parentNode) wave.parentNode.removeChild(wave);
+    }, 1000);
+  }
+
+  function createExplosion(x, y) {
+    for (let i = 0; i < 12; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'explosion-particle';
+      
+      const angle = (i / 12) * Math.PI * 2;
+      const distance = 50 + Math.random() * 50;
+      const finalX = x + Math.cos(angle) * distance;
+      const finalY = y + Math.sin(angle) * distance;
+      
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+      
+      document.body.appendChild(particle);
+      
+      // Animar hacia la posición final
+      particle.animate([
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: `translate(${finalX - x}px, ${finalY - y}px) scale(0)`, opacity: 0 }
+      ], {
+        duration: 1500,
+        easing: 'ease-out'
+      });
+      
+      setTimeout(() => {
+        if (particle.parentNode) particle.parentNode.removeChild(particle);
+      }, 1500);
+    }
+  }
+
+  function createMagicTrail(x, y) {
+    const trail = document.createElement('div');
+    trail.className = 'magic-trail';
+    trail.style.left = x + 'px';
+    trail.style.top = y + 'px';
+    trail.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]}, transparent)`;
+    
+    document.body.appendChild(trail);
+    
+    setTimeout(() => {
+      if (trail.parentNode) trail.parentNode.removeChild(trail);
+    }, 1000);
+  }
+
+  function createShootingStar() {
+    const star = document.createElement('div');
+    star.className = 'shooting-star';
+    star.style.left = '-100px';
+    star.style.top = Math.random() * (window.innerHeight / 2) + 'px';
+    
+    document.body.appendChild(star);
+    
+    setTimeout(() => {
+      if (star.parentNode) star.parentNode.removeChild(star);
+    }, 3000);
+  }
+
+  function createReadingBubble() {
+    const bubble = document.createElement('div');
+    bubble.className = 'reading-bubble';
+    bubble.textContent = readingBubbles[Math.floor(Math.random() * readingBubbles.length)];
+    bubble.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+    bubble.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+    
+    document.body.appendChild(bubble);
+    
+    setTimeout(() => {
+      if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
+    }, 4000);
+  }
+
+  function showMotivationalQuote() {
+    if (quotesShown >= motivationalQuotes.length) return;
+    
+    const quote = document.createElement('div');
+    quote.className = 'motivational-quote';
+    quote.textContent = motivationalQuotes[quotesShown];
+    
+    document.body.appendChild(quote);
+    quotesShown++;
+    
+    setTimeout(() => {
+      if (quote.parentNode) quote.parentNode.removeChild(quote);
+    }, 5000);
+  }
+
+  function incrementWordCount() {
+    wordCount += Math.floor(Math.random() * 5) + 1;
+    document.getElementById('wordCount').textContent = wordCount;
+  }
+
+  function createMagicParticle(x, y) {
+    const particle = document.createElement('div');
+    particle.className = 'magic-particle';
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]}, transparent)`;
+    
+    document.body.appendChild(particle);
+    
+    setTimeout(() => {
+      if (particle.parentNode) particle.parentNode.removeChild(particle);
+    }, 2000);
+  }
+
+  // Intervalos para efectos automáticos
+  setInterval(createShootingStar, 3000);
+  setInterval(createReadingBubble, 5000);
+  setInterval(showMotivationalQuote, 15000);
+  setInterval(() => {
+    wordCount += Math.floor(Math.random() * 3) + 1;
+    document.getElementById('wordCount').textContent = wordCount;
+  }, 2000);
+
+  // Parallax mejorado
+  window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallax1 = scrolled * 0.5;
+    const parallax2 = scrolled * 0.3;
+    
+    canvas.style.transform = `translateY(${parallax1}px)`;
+    document.querySelector('.aurora').style.transform = `translateY(${parallax2}px)`;
+  });
+
+  // Partículas mágicas que siguen el mouse
+
+  // Inicialización
   resize();
-  initParticles(100);
-  animate();
+  initParticles(120);
+  enhancedAnimate();
+
+  // Efectos de scroll
+  window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallax = scrolled * 0.5;
+    canvas.style.transform = `translateY(${parallax}px)`;
+  });
+
+  // Animaciones de entrada
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.slide-up').forEach(el => {
+    observer.observe(el);
+  });
 </script>
 </body>
 </html>
