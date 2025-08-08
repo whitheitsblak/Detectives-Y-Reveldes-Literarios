@@ -104,6 +104,7 @@
     height: 200px;
     perspective: 1000px;
     margin: 20px 0;
+    cursor: pointer;
   }
   
   .flip-card-inner {
@@ -143,6 +144,22 @@
     background: linear-gradient(135deg, #4caf50, #66bb6a);
     color: white;
     transform: rotateY(180deg);
+  }
+
+  /* Efectos visuales especiales para la biblioteca virtual */
+  .flip-card.biblioteca:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.5));
+  }
+
+  .flip-card.biblioteca .flip-card-back {
+    background: linear-gradient(135deg, #2e7d32, #4caf50, #66bb6a);
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.6); }
   }
 
   /* Ondas de colores al hacer clic */
@@ -724,7 +741,7 @@
     <div class="navigation-section">
       <h3><span class="emoji-mov">🔍</span> Explora Nuestro Mundo Literario</h3>
       
-      <div class="flip-card">
+      <div class="flip-card biblioteca" onclick="window.location.href='https://whitheitsblak.github.io/BiblotecaLiteraria/'">
         <div class="flip-card-inner">
           <div class="flip-card-front">
             <div>
@@ -736,7 +753,7 @@
           <div class="flip-card-back">
             <div>
               <h4>📚 Libros Disponibles</h4>
-              <p>Más de 500 títulos esperándote. Desde clásicos hasta novelas contemporáneas que desafiarán tu imaginación.</p>
+              <p>Más de 500 títulos esperándote. Desde clásicos hasta novelas contemporáneas que desafiarán tu imaginación. ¡Haz clic para explorar!</p>
             </div>
           </div>
         </div>
@@ -1086,8 +1103,6 @@
     document.querySelector('.aurora').style.transform = `translateY(${parallax2}px)`;
   });
 
-  // Partículas mágicas que siguen el mouse
-
   // Inicialización
   resize();
   initParticles(120);
@@ -1120,3 +1135,4 @@
 </script>
 </body>
 </html>
+
