@@ -4,1178 +4,1158 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DETECTIVES LITERARIOS</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  :root {
+    --g1: #021a0e;
+    --g2: #052e18;
+    --g3: #0a4a28;
+    --g4: #116638;
+    --g5: #1a8f52;
+    --g6: #23b86e;
+    --g7: #3de08e;
+    --g8: #7fffc4;
+    --g9: #b8ffe0;
+    --gold: #d4a843;
+    --gold-pale: #f0d080;
+    --ivory: #eefaf4;
   }
-  
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
   body {
-    font-family: "Inter", sans-serif;
-    background: linear-gradient(135deg, #a8e6a3 0%, #d4f1d0 50%, #e8f8e6 100%);
-    color: #2e5d22;
-    position: relative;
+    font-family: 'Raleway', sans-serif;
+    background: var(--g1);
+    color: var(--ivory);
     overflow-x: hidden;
-    min-height: 100vh;
+    cursor: none;
+  }
+  ::selection { background: var(--g7); color: var(--g1); }
+
+  /* CURSOR */
+  #cur {
+    position:fixed; width:10px; height:10px;
+    background: var(--g8); border-radius:50%;
+    pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 14px var(--g7),0 0 30px rgba(63,255,180,0.4);
+    transition:width .25s,height .25s;
+    mix-blend-mode:screen;
+  }
+  #curRing {
+    position:fixed; width:34px; height:34px;
+    border:1.5px solid rgba(127,255,196,0.45);
+    border-radius:50%; pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
   }
 
-  /* Header mejorado */
+  /* BG LAYERS
+     Antes cada capa era su propio elemento position:fixed (8+ capas).
+     En iOS/Android, cuando la barra de direcciones aparece/desaparece al
+     hacer scroll, TODOS los elementos fixed se repintan — con 8+ capas
+     esto es la causa #1 de "se congela / se traba / retrocede".
+     Ahora hay UN solo contenedor fixed (.bg-fixed-wrap) y las capas van
+     dentro como position:absolute (visualmente idéntico, pero el
+     navegador solo gestiona 1 capa fixed en vez de 8+). */
+  .bg-fixed-wrap { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .bg-base {
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%,rgba(17,102,56,0.55) 0%,transparent 60%),
+      radial-gradient(ellipse 60% 70% at 85% 80%,rgba(10,74,40,0.6) 0%,transparent 55%),
+      radial-gradient(ellipse 100% 100% at 50% 50%,rgba(5,46,24,0.8) 0%,var(--g1) 100%);
+  }
+  .bg-hex {
+    position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zM28 100L0 84V50l28-16 28 16v34L28 100z' fill='none' stroke='%2323b86e' stroke-width='0.8'/%3E%3C/svg%3E");
+    background-size:56px 100px;
+  }
+  .bg-grid {
+    position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0.038;
+    background-image:
+      linear-gradient(rgba(63,224,142,0.8) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(63,224,142,0.8) 1px,transparent 1px);
+    background-size:60px 60px;
+  }
+  .bg-rays {
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:repeating-linear-gradient(-55deg,transparent 0px,transparent 80px,rgba(35,184,110,0.018) 80px,rgba(35,184,110,0.018) 82px);
+  }
+  .bg-aurora {
+    position:absolute; top:-50%; left:-60%;
+    width:220%; height:200%; z-index:1; pointer-events:none;
+    background:conic-gradient(from 0deg at 50% 60%,
+      transparent 0deg,rgba(26,143,82,0.06) 40deg,rgba(35,184,110,0.09) 80deg,
+      rgba(63,224,142,0.06) 120deg,transparent 160deg,transparent 200deg,
+      rgba(17,102,56,0.05) 240deg,rgba(10,74,40,0.04) 280deg,transparent 360deg);
+    animation:auroraSpin 30s linear infinite;
+    filter:blur(40px);
+  }
+  @keyframes auroraSpin { to { transform:rotate(360deg); } }
+  .bg-noise {
+    position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0.06;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:256px;
+  }
+  .bg-vignette {
+    position:absolute; inset:0; z-index:3; pointer-events:none;
+    background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(2,26,14,0.5) 80%,rgba(2,26,14,0.85) 100%);
+  }
+  .orb { position:absolute; border-radius:50%; pointer-events:none; z-index:1; }
+  .orb-a { width:700px; height:700px; top:-200px; left:-200px; background:radial-gradient(circle,rgba(26,143,82,0.14) 0%,transparent 65%); filter:blur(60px); animation:orbA 25s ease-in-out infinite alternate; }
+  .orb-b { width:500px; height:500px; bottom:-100px; right:-100px; background:radial-gradient(circle,rgba(63,224,142,0.1) 0%,transparent 65%); filter:blur(50px); animation:orbA 20s ease-in-out infinite alternate-reverse; }
+  .orb-c { width:350px; height:350px; top:40%; left:50%; background:radial-gradient(circle,rgba(212,168,67,0.06) 0%,transparent 60%); filter:blur(60px); animation:orbA 35s ease-in-out infinite alternate; }
+  @keyframes orbA { 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(60px,40px) scale(1.15);} }
+
+  #bgCanvas { position:absolute; inset:0; z-index:2; pointer-events:none; }
+
+  /* Estrellas CSS — alternativa ultraligera al canvas.
+     Solo animan opacity/transform (el navegador las compone en la GPU,
+     sin recalcular nada por JS en cada frame). Se usan en navegadores
+     embebidos (WhatsApp/Instagram/Facebook) donde el canvas con JS
+     por frame suele ir lento. */
+  .css-stars { position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+  .css-star {
+    position:absolute; border-radius:50%; background:var(--g7);
+    box-shadow:0 0 4px rgba(63,224,142,0.8);
+    animation-name:cssTwinkle; animation-timing-function:ease-in-out; animation-iteration-count:infinite;
+    opacity:0;
+  }
+  @keyframes cssTwinkle {
+    0%,100% { opacity:0; transform:scale(.5); }
+    50%     { opacity:.75; transform:scale(1); }
+  }
+
+  /* WORD COUNTER
+     Antes era position:fixed. Los navegadores embebidos de WhatsApp/
+     Instagram/Facebook (donde se abrió tu enlace en la captura) tienen
+     soporte muy pobre de position:fixed — el elemento se esconde o se
+     rompe al hacer scroll. Con absolute, siempre se renderiza bien
+     (solo que ahora se desplaza junto con el contenido en vez de flotar). */
+  .wc {
+    position:absolute; top:18px; right:18px;
+    background:rgba(5,46,24,0.75); backdrop-filter:blur(16px);
+    border:1px solid rgba(63,224,142,0.2); color:var(--g8);
+    padding:7px 16px; border-radius:40px; font-size:0.72rem;
+    font-weight:600; letter-spacing:0.1em; z-index:1002; text-transform:uppercase;
+  }
+  .wc span { color:var(--gold-pale); }
+
+  /* HEADER */
   header {
-    background: linear-gradient(135deg, #4caf50, #66bb6a, #81c784);
-    text-align: center;
-    padding: 40px 20px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
+    position:relative; z-index:10;
+    text-align:center; padding:90px 20px 65px;
   }
-  
-  header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: shimmer 3s infinite;
+  .deco-line {
+    width:0; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    margin:0 auto 22px;
+    animation:lineGrow 1.5s ease-out 0.3s forwards;
   }
-  
-  @keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
+  @keyframes lineGrow { to { width:160px; } }
+
+  .title-wrap {
+    display:inline-block; margin-bottom:12px;
+    animation:titleDrop 1.2s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
-  
-  .header-title {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    color: white;
-    font-family: 'Pacifico', cursive;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    position: relative;
-    z-index: 2;
-    margin-bottom: 10px;
-    overflow: hidden;
+  @keyframes titleDrop {
+    from{opacity:0;transform:translateY(-40px) scale(0.92);}
+    to{opacity:1;transform:translateY(0) scale(1);}
   }
-  
-  .typewriter {
-    display: inline-block;
-    border-right: 3px solid rgba(255,255,255,0.8);
-    white-space: nowrap;
-    overflow: hidden;
-    animation: typing 4s steps(30, end), blink 1s infinite 4s, removeCursor 0s 6s forwards;
+  .star-icon {
+    display:inline-block; font-style:normal;
+    color:var(--gold); filter:drop-shadow(0 0 8px rgba(212,168,67,0.7));
+    font-size:clamp(1.2rem,2.5vw,2rem); vertical-align:middle; margin:0 12px;
+    animation:starSpin 8s linear infinite;
   }
-  
-  @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+  @keyframes starSpin { to { transform:rotate(360deg); } }
+
+  .title-3d {
+    font-family:'Cinzel',serif;
+    font-size:clamp(1.4rem,3.5vw,3rem);
+    font-weight:900; letter-spacing:0.14em;
+    text-transform:uppercase; display:inline-block; position:relative;
+    background:linear-gradient(180deg,#ffffff 0%,#d4ffec 18%,#7fffc4 40%,#3de08e 62%,#23b86e 80%,#1a8f52 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    filter:
+      drop-shadow(0 1px 0 rgba(127,255,196,0.6))
+      drop-shadow(0 2px 0 rgba(63,224,142,0.55))
+      drop-shadow(0 3px 0 rgba(35,184,110,0.5))
+      drop-shadow(0 4px 0 rgba(26,143,82,0.45))
+      drop-shadow(0 5px 0 rgba(17,102,56,0.4))
+      drop-shadow(0 6px 0 rgba(10,74,40,0.35))
+      drop-shadow(0 7px 0 rgba(5,46,24,0.3))
+      drop-shadow(0 10px 20px rgba(2,26,14,0.7))
+      drop-shadow(0 0 40px rgba(63,224,142,0.25))
+      drop-shadow(0 0 80px rgba(127,255,196,0.12));
+    animation:titleFloat 7s ease-in-out infinite;
   }
-  
-  @keyframes blink {
-    0%, 50% { border-color: rgba(255,255,255,0.8) }
-    51%, 100% { border-color: transparent }
+  @keyframes titleFloat {
+    0%,100%{transform:translateY(0) perspective(600px) rotateX(0deg);}
+    50%{transform:translateY(-8px) perspective(600px) rotateX(3deg);}
   }
-  
-  @keyframes removeCursor {
-    to { border-right: none; }
+  .title-3d::after {
+    content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
+    animation:shimmerTitle 4s ease-in-out infinite; pointer-events:none;
   }
-  
-  .header-subtitle {
-    font-size: 1.1rem;
-    color: rgba(255,255,255,0.9);
-    font-weight: 500;
-    position: relative;
-    z-index: 2;
+  @keyframes shimmerTitle { 0%{left:-100%;} 60%,100%{left:150%;} }
+
+  .subtitle {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(0.85rem,1.8vw,1.2rem);
+    font-style:italic; font-weight:300; letter-spacing:0.18em;
+    color:rgba(184,255,224,0.75); margin-top:14px;
+    animation:fadeUp 1s ease-out 0.8s both;
+  }
+  @keyframes fadeUp {
+    from{opacity:0;transform:translateY(12px);}
+    to{opacity:1;transform:translateY(0);}
   }
 
-  /* Main content */
-  main {
-    padding: 40px 20px;
-    text-align: center;
-    max-width: 900px;
-    margin: auto;
-    position: relative;
-  }
+  /* MAIN */
+  main { position:relative; z-index:10; padding:10px 20px 70px; max-width:860px; margin:auto; }
 
-  /* Cards con flip effect */
-  .flip-card {
-    background-color: transparent;
-    width: 100%;
-    height: 200px;
-    perspective: 1000px;
-    margin: 20px 0;
-    cursor: pointer;
-  }
-  
-  .flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-  }
-  
-  .flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-  }
-  
-  .flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  }
-  
-  .flip-card-front {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-  }
-  
-  .flip-card-back {
-    background: linear-gradient(135deg, #4caf50, #66bb6a);
-    color: white;
-    transform: rotateY(180deg);
-  }
-
-  /* Efectos visuales especiales para la biblioteca virtual */
-  .flip-card.biblioteca:hover {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.5));
-  }
-
-  .flip-card.biblioteca .flip-card-back {
-    background: linear-gradient(135deg, #2e7d32, #4caf50, #66bb6a);
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
-
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.3); }
-    50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.6); }
-  }
-
-  /* Ondas de colores al hacer clic */
-  .click-wave {
-    position: fixed;
-    border-radius: 50%;
-    border: 3px solid rgba(76, 175, 80, 0.6);
-    pointer-events: none;
-    z-index: 1000;
-    animation: waveExpand 1s ease-out forwards;
-  }
-  
-  @keyframes waveExpand {
-    0% {
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-    100% {
-      width: 300px;
-      height: 300px;
-      opacity: 0;
-    }
-  }
-
-  /* Estrellas fugaces */
-  .shooting-star {
-    position: fixed;
-    width: 3px;
-    height: 3px;
-    background: linear-gradient(45deg, #4caf50, #81c784);
-    border-radius: 50%;
-    box-shadow: 0 0 10px #4caf50;
-    animation: shootingStar 3s linear forwards;
-    z-index: 1;
-  }
-  
-  @keyframes shootingStar {
-    0% {
-      transform: translateX(-100px) translateY(-100px);
-      opacity: 1;
-    }
-    70% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px));
-      opacity: 0;
-    }
-  }
-
-  /* Burbujas de lectura */
-  .reading-bubble {
-    position: fixed;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: #2e7d32;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    pointer-events: none;
-    z-index: 1000;
-    animation: bubbleFloat 4s ease-out forwards;
-  }
-  
-  @keyframes bubbleFloat {
-    0% {
-      opacity: 0;
-      transform: translateY(50px) scale(0.8);
-    }
-    20% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-    80% {
-      opacity: 1;
-      transform: translateY(-20px) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-100px) scale(0.8);
-    }
-  }
-
-  /* Aurora boreal literaria */
-  .aurora {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      rgba(76, 175, 80, 0.1) 25%, 
-      rgba(129, 199, 132, 0.15) 50%, 
-      rgba(165, 214, 167, 0.1) 75%, 
-      transparent 100%);
-    animation: auroraMove 15s linear infinite;
-  }
-  
-  @keyframes auroraMove {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-
-  /* Rastro de brillos que sigue al mouse */
-  .magic-trail {
-    position: fixed;
-    width: 6px;
-    height: 6px;
-    background: radial-gradient(circle, #4caf50, transparent);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: trailFade 1s ease-out forwards;
-    z-index: 999;
-  }
-  
-  @keyframes trailFade {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0);
-    }
-  }
-
-  /* Explosión de partículas */
-  .explosion-particle {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: #4caf50;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1000;
-    animation: explode 1.5s ease-out forwards;
-  }
-  
-  @keyframes explode {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0);
-    }
-  }
-
-  /* Frases motivacionales */
-  .motivational-quote {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px 30px;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    color: #2e7d32;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    pointer-events: none;
-    z-index: 1001;
-    animation: quoteAppear 5s ease-in-out forwards;
-    max-width: 80%;
-    font-weight: 500;
-  }
-  
-  @keyframes quoteAppear {
-    0%, 15% {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-20px) scale(0.9);
-    }
-    20%, 80% {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0) scale(1);
-    }
-    85%, 100% {
-      opacity: 0;
-      transform: translateX(-50%) translateY(20px) scale(0.9);
-    }
-  }
-
-  /* Contador de palabras */
-  .word-counter {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: rgba(76, 175, 80, 0.9);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    z-index: 1002;
-    animation: counterPulse 2s ease-in-out infinite;
-  }
-  
-  @keyframes counterPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-
-  /* Parallax multicapa */
-  .parallax-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 120%;
-    height: 120%;
-    pointer-events: none;
-    z-index: -1;
-  }
-  .magic-particle {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: radial-gradient(circle, #4caf50, transparent);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: magicFloat 2s ease-out forwards;
-    z-index: 1000;
-  }
-  
-  @keyframes magicFloat {
-    0% {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0) translateY(-100px);
-    }
-  }
   .card {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 30px;
-    margin: 30px 0;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    position:relative; border-radius:26px; padding:40px 36px; margin:26px 0;
+    text-align:center; transition:transform .4s ease,box-shadow .4s ease;
+    animation:cardUp .9s cubic-bezier(0.22,1,0.36,1) both; overflow:hidden;
+    background:linear-gradient(145deg,rgba(255,255,255,0.065) 0%,rgba(35,184,110,0.04) 100%);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
+    border:1px solid rgba(63,224,142,0.18);
+    box-shadow:0 2px 0 rgba(127,255,196,0.08) inset,0 30px 70px rgba(2,26,14,0.55),0 0 0 1px rgba(2,26,14,0.3);
   }
-  
+  .card::before {
+    content:''; position:absolute; inset:0; border-radius:26px;
+    background:linear-gradient(135deg,rgba(127,255,196,0.06) 0%,transparent 40%,transparent 60%,rgba(35,184,110,0.04) 100%);
+    pointer-events:none;
+  }
+  .card::after {
+    content:''; position:absolute; inset:0; border-radius:26px; opacity:0.025;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='1' fill='%237fffc4'/%3E%3C/svg%3E");
+    background-size:40px 40px; pointer-events:none;
+  }
+  @keyframes cardUp { from{opacity:0;transform:translateY(36px);} to{opacity:1;transform:translateY(0);} }
   .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    transform:translateY(-8px);
+    box-shadow:0 2px 0 rgba(127,255,196,0.1) inset,0 40px 90px rgba(2,26,14,0.6),0 0 60px rgba(35,184,110,0.1);
   }
 
-  .logo-institucion {
-    width: 150px;
-    margin: 20px 0;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-    filter: brightness(1.1);
+  .logo-inst {
+    width:140px; aspect-ratio:1/1; object-fit:cover;
+    margin:0 auto 26px; display:block; border-radius:18px;
+    box-shadow:0 12px 50px rgba(2,26,14,0.5),0 0 30px rgba(35,184,110,0.2);
+    transition:all .4s ease; filter:brightness(1.08) saturate(1.1);
   }
-  
-  .logo-institucion:hover {
-    transform: scale(1.05) rotate(2deg);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  .logo-inst:hover { transform:scale(1.07) rotate(1.5deg); box-shadow:0 20px 70px rgba(2,26,14,0.6),0 0 50px rgba(63,224,142,0.35); }
+  .logo-escu {
+    width:130px; aspect-ratio:1/1; object-fit:cover;
+    margin:0 auto 34px; display:block; border-radius:22px;
+    box-shadow:0 14px 55px rgba(2,26,14,0.55),0 0 35px rgba(35,184,110,0.22);
+    transition:all .4s ease; filter:brightness(1.06) saturate(1.1);
+  }
+  .logo-escu:hover { transform:scale(1.09) rotate(-2deg); box-shadow:0 24px 75px rgba(2,26,14,0.65),0 0 60px rgba(63,224,142,0.4); }
+
+  .welcome-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.05rem,2vw,1.25rem);
+    line-height:1.9; color:rgba(238,250,244,0.94);
+    font-weight:400; margin-bottom:34px;
+    text-shadow:0 1px 8px rgba(2,26,14,0.6);
   }
 
-  .texto-bienvenida {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    font-weight: 500;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+  .btn-row { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; }
+  .btn-s {
+    display:inline-flex; align-items:center; gap:10px;
+    padding:13px 26px; border-radius:50px; border:none;
+    font-family:'Raleway',sans-serif; font-size:0.87rem;
+    font-weight:700; letter-spacing:0.07em;
+    cursor:pointer; position:relative; overflow:hidden; transition:all .32s ease;
+  }
+  .btn-s svg { width:19px; height:19px; flex-shrink:0; }
+  .btn-s::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.14); opacity:0; transition:opacity .3s; }
+  .btn-s:hover::after { opacity:1; }
+  .btn-s:hover { transform:translateY(-4px) scale(1.05); }
+  .btn-ig { background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); color:#fff; box-shadow:0 8px 28px rgba(131,58,180,0.45); }
+  .btn-fb { background:linear-gradient(135deg,#0866ff,#1877f2); color:#fff; box-shadow:0 8px 28px rgba(8,102,255,0.45); }
+  .btn-tt { background:linear-gradient(135deg,#010101,#1a1a2e); color:#fff; box-shadow:0 8px 28px rgba(1,1,1,0.55); border:1px solid rgba(255,255,255,0.12); }
+
+  .sec-title {
+    font-family:'Cinzel',serif; font-size:clamp(0.95rem,2.2vw,1.35rem);
+    font-weight:700; letter-spacing:0.18em; color:var(--g8);
+    text-shadow:0 0 20px rgba(127,255,196,0.4),0 0 40px rgba(63,224,142,0.2);
+    margin-bottom:28px; text-align:center; text-transform:uppercase;
   }
 
-  /* Botones mejorados */
-  .btn-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin: 30px 0;
+  .flip { width:100%; height:175px; perspective:1300px; margin:14px 0; cursor:pointer; }
+  .flip-inner {
+    width:100%; height:100%; position:relative;
+    transition:transform .8s cubic-bezier(.4,0,.2,1); transform-style:preserve-3d;
+  }
+  .flip:hover .flip-inner { transform:rotateY(180deg); }
+  .flip-f,.flip-b {
+    position:absolute; width:100%; height:100%;
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    border-radius:18px; display:flex; align-items:center;
+    justify-content:center; padding:22px 28px; text-align:center;
+  }
+  .flip-f {
+    background:linear-gradient(145deg,rgba(255,255,255,0.055),rgba(35,184,110,0.07));
+    border:1px solid rgba(63,224,142,0.15);
+    box-shadow:0 12px 40px rgba(2,26,14,0.4),inset 0 1px 0 rgba(127,255,196,0.06);
+    backdrop-filter:blur(14px);
+  }
+  .flip-f .fi { font-size:2.2rem; display:block; margin-bottom:10px; filter:drop-shadow(0 0 8px rgba(63,224,142,0.5)); }
+  .flip-f h4 {
+    font-family:'Cinzel',serif; font-size:.95rem; font-weight:700;
+    letter-spacing:.08em; color:var(--ivory);
+    text-shadow:0 0 12px rgba(127,255,196,0.3); margin-bottom:5px;
+  }
+  .flip-f p { font-family:'Cormorant Garamond',serif; font-size:.92rem; color:rgba(184,255,224,0.6); font-style:italic; }
+  .flip-b {
+    background:linear-gradient(145deg,var(--g3),var(--g2));
+    border:1px solid rgba(63,224,142,0.3);
+    box-shadow:0 12px 50px rgba(2,26,14,0.55),inset 0 0 40px rgba(35,184,110,0.15);
+    transform:rotateY(180deg);
+  }
+  .flip-b h4 {
+    font-family:'Cinzel',serif; font-size:.95rem; font-weight:700;
+    color:var(--g8); margin-bottom:9px; letter-spacing:.08em;
+    text-shadow:0 0 15px rgba(127,255,196,0.4);
+  }
+  .flip-b p { font-family:'Cormorant Garamond',serif; font-size:.98rem; color:rgba(238,250,244,0.9); line-height:1.65; font-style:italic; }
+  .flip.bib .flip-b {
+    background:linear-gradient(145deg,#0b3d24,#0f5533,#175c3a);
+    box-shadow:0 12px 50px rgba(2,26,14,0.6),0 0 30px rgba(35,184,110,0.2),inset 0 0 40px rgba(63,224,142,0.1);
   }
 
-  button.social, button.section {
-    background: linear-gradient(135deg, #4caf50, #66bb6a);
-    border: none;
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 15px 30px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-    position: relative;
-    overflow: hidden;
+  .quote-card {
+    position:relative; border-radius:26px; padding:44px 36px; margin:26px 0; overflow:hidden;
+    animation:cardUp .9s ease-out 0.4s both;
+    background:linear-gradient(145deg,rgba(212,168,67,0.07) 0%,rgba(17,102,56,0.12) 50%,rgba(212,168,67,0.05) 100%);
+    border:1px solid rgba(212,168,67,0.2);
+    box-shadow:0 30px 70px rgba(2,26,14,0.5),0 0 40px rgba(212,168,67,0.04);
   }
-  
-  button.social::before, button.section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
+  .quote-card::before {
+    content:'\201C'; position:absolute; top:-30px; left:16px;
+    font-family:'Cormorant Garamond',serif; font-size:14rem;
+    color:rgba(212,168,67,0.06); line-height:1; pointer-events:none;
   }
-  
-  button.social:hover::before, button.section:hover::before {
-    left: 100%;
+  .quote-card::after {
+    content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
   }
+  .quote-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.1rem,2.5vw,1.55rem);
+    font-style:italic; font-weight:400;
+    color:rgba(238,250,244,0.97); line-height:1.8;
+    text-shadow:0 2px 20px rgba(2,26,14,0.5); position:relative; z-index:2;
+  }
+  .quote-rule { width:70px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:22px auto 0; }
 
-  button.social:hover, button.section:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
-    background: linear-gradient(135deg, #388e3c, #4caf50);
-  }
-  
-  button.social:active, button.section:active {
-    transform: translateY(-1px) scale(1.02);
-  }
-
-  .logo-escudo {
-    width: 140px;
-    margin: 30px auto;
-    display: block;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    transition: all 0.4s ease;
-    filter: brightness(1.1);
-  }
-  
-  .logo-escudo:hover {
-    transform: scale(1.1) rotate(-3deg);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
-  }
-
-  /* Sección de navegación mejorada */
-  .navigation-section {
-    margin-top: 40px;
-  }
-  
-  .navigation-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    color: #2e7d32;
-    font-weight: 700;
-  }
-
-  /* Footer mejorado */
+  /* FOOTER */
   footer {
-    background: linear-gradient(135deg, #2e7d32, #388e3c, #4caf50);
-    color: white;
-    text-align: center;
-    padding: 30px 20px;
-    margin-top: 60px;
-    position: relative;
-    overflow: hidden;
+    position:relative; z-index:10; padding:55px 20px 40px;
+    text-align:center;
+    background:linear-gradient(0deg,rgba(2,26,14,0.98) 0%,transparent 100%);
   }
-  
-  footer::before {
+  .footer-rule { width:0; height:1px; background:linear-gradient(90deg,transparent,rgba(63,224,142,0.35),transparent); margin:0 auto 30px; animation:lineGrow 1.5s ease-out 1s forwards; }
+  .footer-title { font-family:'Cinzel',serif; font-size:.85rem; letter-spacing:.22em; color:var(--g7); margin-bottom:18px; text-transform:uppercase; text-shadow:0 0 20px rgba(63,224,142,0.3); }
+  .footer-info { font-family:'Cormorant Garamond',serif; font-size:1.02rem; line-height:2; color:rgba(184,255,224,0.6); font-style:italic; }
+  .footer-info strong { color:rgba(238,250,244,0.85); font-style:normal; }
+
+  /* EFFECTS */
+  .ripple { position:fixed; border-radius:50%; border:1px solid rgba(63,224,142,0.4); pointer-events:none; z-index:9997; transform:translate(-50%,-50%); animation:ripOut .7s ease-out forwards; }
+  @keyframes ripOut { 0%{width:0;height:0;opacity:.9;} 100%{width:180px;height:180px;opacity:0;} }
+  .spark { position:fixed; border-radius:50%; pointer-events:none; z-index:9996; animation:sparkFly 1.2s ease-out forwards; }
+  @keyframes sparkFly { 0%{opacity:1;transform:scale(1);} 100%{opacity:0;transform:scale(0) translate(var(--tx),var(--ty));} }
+  .bubble { position:fixed; background:rgba(5,46,24,0.85); backdrop-filter:blur(14px); border:1px solid rgba(63,224,142,0.2); padding:6px 14px; border-radius:30px; font-size:.7rem; color:var(--g8); letter-spacing:.08em; text-transform:uppercase; font-family:'Raleway',sans-serif; pointer-events:none; z-index:1000; animation:bubRise 4s ease-out forwards; }
+  @keyframes bubRise { 0%{opacity:0;transform:translateY(20px) scale(.85);} 15%{opacity:1;transform:translateY(0) scale(1);} 80%{opacity:.8;transform:translateY(-70px) scale(1);} 100%{opacity:0;transform:translateY(-130px) scale(.85);} }
+  .quote-pop { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(5,46,24,0.95); border:1px solid rgba(63,224,142,0.18); padding:20px 24px; border-radius:18px; font-family:'Cormorant Garamond',serif; font-size:0.95rem; font-style:italic; color:rgba(238,250,244,0.92); text-align:center; width:calc(100% - 48px); max-width:480px; pointer-events:none; z-index:1005; box-shadow:0 24px 70px rgba(2,26,14,0.6); animation:qPop 5s ease-in-out forwards; }
+  @keyframes qPop { 0%{opacity:0;transform:translateX(-50%) translateY(-18px) scale(.94);} 12%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);} 80%{opacity:1;} 100%{opacity:0;} }
+  .comet { position:fixed; border-radius:50%; width:2px; height:2px; background:var(--g8); box-shadow:0 0 6px var(--g7),0 0 18px rgba(127,255,196,0.3); pointer-events:none; z-index:4; animation:cometFly 5s linear forwards; }
+  @keyframes cometFly { 0%{opacity:0;transform:translate(0,0);} 8%{opacity:1;} 90%{opacity:.4;} 100%{opacity:0;transform:translate(130vw,55vh);} }
+
+  @media(max-width:768px){
+    header{padding:55px 16px 42px;}
+    .card{padding:26px 18px;}
+    .flip{height:155px;}
+    .title-3d{letter-spacing:.06em;}
+    .wc{font-size:.65rem;padding:6px 12px;}
+    .quote-pop{font-size:.84rem;max-width:88%;padding:16px 22px;}
+    .btn-s{padding:11px 18px;font-size:.8rem;}
+  }
+  /* ══════════════════════════════
+     QR SECTION
+  ══════════════════════════════ */
+  .qr-section {
+    position: relative;
+    margin: 26px 0;
+    padding: 52px 36px 44px;
+    border-radius: 26px;
+    text-align: center;
+    overflow: hidden;
+    animation: cardUp .9s ease-out 0.5s both;
+
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(35,184,110,0.12) 0%, transparent 65%),
+      linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(10,74,40,0.15) 50%, rgba(255,255,255,0.03) 100%);
+    backdrop-filter: blur(22px);
+    border: 1px solid rgba(63,224,142,0.2);
+    box-shadow:
+      0 30px 80px rgba(2,26,14,0.6),
+      inset 0 1px 0 rgba(127,255,196,0.07),
+      0 0 60px rgba(35,184,110,0.06);
+  }
+
+  /* Hex texture overlay */
+  .qr-section::before {
+    content: '';
+    position: absolute; inset: 0; border-radius: 26px;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zM28 100L0 84V50l28-16 28 16v34L28 100z' fill='none' stroke='%237fffc4' stroke-width='0.6'/%3E%3C/svg%3E");
+    background-size: 40px 72px;
+    pointer-events: none;
+  }
+
+  /* Top glow streak */
+  .qr-section::after {
+    content: '';
+    position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(127,255,196,0.5), var(--gold), rgba(127,255,196,0.5), transparent);
+    pointer-events: none;
+  }
+
+  /* ── Top deco bar ── */
+  .qr-top-deco {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin-bottom: 26px;
+  }
+  .qr-deco-line {
+    flex: 1; max-width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.6));
+  }
+  .qr-deco-line:last-child {
+    background: linear-gradient(90deg, rgba(212,168,67,0.6), transparent);
+  }
+  .qr-deco-diamond {
+    color: var(--gold);
+    font-size: 0.8rem;
+    filter: drop-shadow(0 0 6px rgba(212,168,67,0.6));
+    animation: diamondPulse 3s ease-in-out infinite;
+  }
+  @keyframes diamondPulse {
+    0%,100% { transform: scale(1) rotate(0deg); opacity:.8; }
+    50%      { transform: scale(1.3) rotate(45deg); opacity:1; }
+  }
+
+  /* ── Titles ── */
+  .qr-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.2rem, 2.8vw, 1.9rem);
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    background: linear-gradient(180deg, #ffffff 0%, #b8ffe0 40%, #3de08e 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(63,224,142,0.3));
+  }
+  .qr-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    font-style: italic; font-weight: 300;
+    color: rgba(184,255,224,0.6);
+    letter-spacing: 0.12em;
+    margin-bottom: 38px;
+  }
+
+  /* ── Stage (QR frame area) ── */
+  .qr-stage {
+    position: relative;
+    width: 230px; height: 230px;
+    margin: 0 auto 36px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Rotating outer ring */
+  .qr-ring-outer {
+    position: absolute; inset: -18px;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    background:
+      linear-gradient(rgba(2,26,14,0), rgba(2,26,14,0)) padding-box,
+      conic-gradient(from 0deg, rgba(63,224,142,0.7), rgba(212,168,67,0.5), rgba(127,255,196,0.7), transparent 60%, transparent 80%, rgba(63,224,142,0.7)) border-box;
+    animation: ringRotate 6s linear infinite;
+  }
+
+  /* Counter-rotating inner ring */
+  .qr-ring-inner {
+    position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background:
+      linear-gradient(rgba(2,26,14,0), rgba(2,26,14,0)) padding-box,
+      conic-gradient(from 180deg, rgba(127,255,196,0.4), transparent 50%, rgba(212,168,67,0.3)) border-box;
+    animation: ringRotate 10s linear infinite reverse;
+  }
+
+  @keyframes ringRotate { to { transform: rotate(360deg); } }
+
+  /* Corner ornaments */
+  .qr-corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    z-index: 3;
+  }
+  .qr-corner::before, .qr-corner::after {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
-    animation: footerGlow 4s ease-in-out infinite alternate;
+    background: var(--g7);
+    box-shadow: 0 0 8px rgba(61,224,142,0.6);
   }
-  
-  @keyframes footerGlow {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(180deg); }
-  }
-  
-  .footer-content {
+  .qr-corner::before { width: 100%; height: 2.5px; top: 0; }
+  .qr-corner::after  { width: 2.5px; height: 100%; top: 0; }
+
+  .qr-tl { top: -2px; left: -2px; }
+  .qr-tr { top: -2px; right: -2px; transform: scaleX(-1); }
+  .qr-bl { bottom: -2px; left: -2px; transform: scaleY(-1); }
+  .qr-br { bottom: -2px; right: -2px; transform: scale(-1); }
+
+  /* The white QR frame */
+  .qr-frame {
     position: relative;
+    width: 200px; height: 200px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.97);
+    box-shadow:
+      0 0 0 1px rgba(63,224,142,0.3),
+      0 0 30px rgba(63,224,142,0.2),
+      0 20px 60px rgba(2,26,14,0.6);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
     z-index: 2;
   }
-  
-  .footer-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
+
+  #qr-container {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
   }
-  
-  .footer-info {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    opacity: 0.9;
+  #qr-container img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border-radius: 14px;
+    display: block;
+  }
+  .qr-placeholder {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.68rem;
+    color: rgba(2,26,14,0.3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.8;
   }
 
-  /* Animaciones mejoradas */
-  .emoji-mov {
+  /* Scan line */
+  .qr-scanline {
+    position: absolute;
+    left: 12px; right: 12px; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(63,224,142,0.7), var(--g8), rgba(63,224,142,0.7), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(63,224,142,0.5);
+    z-index: 4;
+    animation: scanMove 2.8s ease-in-out infinite;
+  }
+  @keyframes scanMove {
+    0%   { top: 12px; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: calc(100% - 12px); opacity: 0; }
+  }
+
+  /* ── Pills ── */
+  .qr-pills {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: 10px;
+    margin-bottom: 22px;
+  }
+  .qr-pill {
+    background: rgba(10,74,40,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(63,224,142,0.2);
+    color: rgba(184,255,224,0.8);
+    padding: 6px 16px; border-radius: 30px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.76rem; font-weight: 600;
+    letter-spacing: 0.06em;
+    transition: all .3s ease;
+  }
+  .qr-pill:hover {
+    background: rgba(35,184,110,0.2);
+    border-color: rgba(63,224,142,0.4);
+    color: var(--g8);
+    transform: translateY(-2px);
+  }
+
+  /* ── Hint ── */
+  .qr-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; font-style: italic;
+    color: rgba(127,255,196,0.35);
+    letter-spacing: 0.1em;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .qr-hint-icon {
     display: inline-block;
-    animation: emojiBounce 2.5s ease-in-out infinite;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    animation: hintBounce 1.6s ease-in-out infinite;
+    color: rgba(63,224,142,0.4);
   }
-  
-  @keyframes emojiBounce {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-12px) scale(1.1); }
-  }
-
-  /* Partículas de fondo mejoradas */
-  #fondoCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.6;
+  @keyframes hintBounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
   }
 
-  /* Efectos de carga */
-  .fade-in {
-    animation: fadeIn 1s ease-out forwards;
-    opacity: 0;
-  }
-  
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-  
-  .slide-up {
-    animation: slideUp 0.8s ease-out forwards;
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  
-  @keyframes slideUp {
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+
+  /* ══════════════════════════════
+     MOBILE — 480px y menos
+  ══════════════════════════════ */
+  @media (max-width: 480px) {
+    #cur, #curRing { display: none; }
+    body { cursor: auto; }
+    header { padding: 52px 16px 36px; }
+    .deco-line { margin-bottom: 14px; }
+    .title-3d { font-size: clamp(1.2rem, 7vw, 1.8rem) !important; letter-spacing: 0.06em !important; }
+    .star-icon { font-size: 1rem; margin: 0 6px; }
+    .subtitle  { font-size: 0.78rem; letter-spacing: 0.1em; margin-top: 10px; }
+    .wc { font-size: 0.6rem; padding: 5px 11px; top: 12px; right: 12px; }
+    .card { padding: 24px 16px; margin: 18px 0; border-radius: 20px; }
+    .logo-inst { width: 110px; margin-bottom: 18px; }
+    .logo-escu { width: 100px; margin-bottom: 22px; }
+    .welcome-text { font-size: 0.92rem; line-height: 1.75; margin-bottom: 24px; }
+    .btn-row { flex-direction: column; align-items: center; gap: 10px; }
+    .btn-s { width: 220px; justify-content: center; padding: 12px 20px; font-size: 0.82rem; }
+    .sec-title { font-size: 0.82rem; letter-spacing: 0.12em; margin-bottom: 18px; }
+    .flip { height: 140px; margin: 10px 0; }
+    .flip-f h4, .flip-b h4 { font-size: 0.82rem; letter-spacing: 0.05em; }
+    .flip-f p,  .flip-b p  { font-size: 0.8rem; line-height: 1.5; }
+    .flip-f .fi { font-size: 1.7rem; margin-bottom: 7px; }
+    .flip-f, .flip-b { padding: 16px 18px; }
+    .quote-card { padding: 32px 20px; }
+    .quote-text { font-size: 0.98rem; line-height: 1.7; }
+    .qr-section { padding: 36px 18px 32px; }
+    .qr-title    { font-size: 1.1rem; letter-spacing: 0.1em; }
+    .qr-subtitle { font-size: 0.8rem; margin-bottom: 26px; }
+    .qr-stage    { width: 190px; height: 190px; margin-bottom: 26px; }
+    .qr-frame    { width: 165px; height: 165px; }
+    .qr-ring-outer { inset: -14px; }
+    .qr-ring-inner { inset: -6px; }
+    .qr-pills { gap: 8px; }
+    .qr-pill  { font-size: 0.68rem; padding: 5px 13px; }
+    .qr-hint  { font-size: 0.78rem; }
+    footer { padding: 40px 16px 30px; }
+    .footer-title { font-size: 0.72rem; letter-spacing: 0.15em; }
+    .footer-info  { font-size: 0.88rem; line-height: 1.85; }
+    .bg-hex  { opacity: 0.03; }
+    .bg-grid { opacity: 0.02; }
+    .orb-a   { width: 350px; height: 350px; }
+    .orb-b   { width: 280px; height: 280px; }
+    .orb-c   { display: none; }
   }
 
-  /* Responsive mejorado */
+  /* ══════════════════════════════
+     MOBILE MEDIO — 481px a 768px
+  ══════════════════════════════ */
+  @media (min-width: 481px) and (max-width: 768px) {
+    #cur, #curRing { display: none; }
+    body { cursor: auto; }
+    header { padding: 60px 20px 44px; }
+    .title-3d { font-size: clamp(1.5rem, 5vw, 2.4rem) !important; letter-spacing: 0.08em !important; }
+    .subtitle  { font-size: 0.85rem; }
+    .wc        { font-size: 0.65rem; }
+    .card  { padding: 30px 22px; margin: 20px 0; }
+    .logo-inst { width: 120px; }
+    .logo-escu { width: 115px; }
+    .btn-row { gap: 10px; }
+    .btn-s   { padding: 11px 20px; font-size: 0.82rem; }
+    .flip   { height: 155px; }
+    .flip-f h4, .flip-b h4 { font-size: 0.88rem; }
+    .qr-stage { width: 200px; height: 200px; }
+    .qr-frame { width: 175px; height: 175px; }
+    .footer-info { font-size: 0.92rem; }
+  }
+
+  /* ── MOBILE PERFORMANCE: quitar backdrop-filter y touch-action ── */
   @media (max-width: 768px) {
-    .btn-container {
-      flex-direction: column;
-      align-items: center;
+    /* Eliminar backdrop-filter en móvil — es la causa #1 de lag */
+    .card, .flip-f, .wc, .bubble, .quote-pop, .qr-section {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
-    
-    button.social, button.section {
-      width: 280px;
-      justify-content: center;
+    /* Evitar que el scroll táctil haga zoom/pinch en elementos interactivos */
+    body {
+      touch-action: pan-y;
     }
-    
+    .flip {
+      touch-action: manipulation;
+    }
+    /* Apagar animación costosa del aurora en móvil */
+    .bg-aurora {
+      animation: none !important;
+    }
+    /* Quitar el ruido (filtro SVG feTurbulence, muy pesado de calcular)
+       y los rayos (opacidad 0.018, casi invisibles) — puro costo, cero beneficio visual en móvil */
+    .bg-noise, .bg-rays {
+      display: none !important;
+    }
+    /* Simplificar filtros del título en móvil */
+    .title-3d {
+      filter:
+        drop-shadow(0 2px 0 rgba(63,224,142,0.5))
+        drop-shadow(0 4px 0 rgba(26,143,82,0.35))
+        drop-shadow(0 6px 10px rgba(2,26,14,0.6))
+        drop-shadow(0 0 20px rgba(63,224,142,0.2)) !important;
+    }
+    /* Quitar animación del título en móvil (libera CPU) */
+    .title-3d { animation: none !important; }
+    .star-icon { animation: none !important; }
+    /* Simplificar sombras de cards */
     .card {
-      margin: 20px 10px;
-      padding: 25px 20px;
+      box-shadow: 0 8px 30px rgba(2,26,14,0.5) !important;
     }
-
-    /* NUEVAS REGLAS PARA MÓVIL - Textos más pequeños */
-    .header-title {
-      font-size: clamp(1.2rem, 3.5vw, 2rem) !important;
-    }
-    
-    .header-subtitle {
-      font-size: 0.75rem !important;
-    }
-    
-    .texto-bienvenida {
-      font-size: 0.85rem !important;
-      line-height: 1.4;
-    }
-    
-    .navigation-section h3 {
-      font-size: 1rem !important;
-    }
-    
-    .flip-card-front h4,
-    .flip-card-back h4 {
-      font-size: 0.9rem !important;
-    }
-    
-    .flip-card-front p,
-    .flip-card-back p {
-      font-size: 0.75rem !important;
-    }
-    
-    .footer-title {
-      font-size: 0.9rem !important;
-    }
-    
-    .footer-info {
-      font-size: 0.7rem !important;
-    }
-    
-    button.social, button.section {
-      font-size: 0.8rem !important;
-      padding: 10px 20px;
-    }
-    
-    .word-counter {
-      font-size: 0.65rem !important;
-      padding: 5px 10px;
-    }
-    
-    .motivational-quote {
-      font-size: 0.75rem !important;
-      padding: 12px 18px;
-      max-width: 90%;
-    }
-    
-    .reading-bubble {
-      font-size: 0.6rem !important;
-    }
+    /* Quitar anillos giratorios del QR en móvil */
+    .qr-ring-outer, .qr-ring-inner { animation: none !important; }
+    /* Orb más ligero */
+    .orb-a, .orb-b { animation: none !important; }
   }
 
-  /* Efectos de hover personalizados */
-  .hover-lift {
-    transition: all 0.3s ease;
+  @media (max-width: 768px) {
+    html { scroll-behavior: auto !important; }
+    #bgCanvas { transform: none !important; will-change: auto; }
+    .orb { transform: none !important; will-change: auto; }
+    * { -webkit-overflow-scrolling: touch; }
   }
-  
-  .hover-lift:hover {
-    transform: translateY(-5px);
+
+  @media (max-width: 768px) {
+    html, body { overscroll-behavior: none; }
+    #bgCanvas { contain: strict; }
+    main, header, footer { position: relative; z-index: 10; }
   }
+
+  /* Respeta la preferencia del sistema de "reducir movimiento" */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    html { scroll-behavior: auto !important; }
+  }
+
 </style>
 </head>
 <body>
-<canvas id="fondoCanvas"></canvas>
-<div class="aurora"></div>
-<div class="word-counter">Palabras descubiertas: <span id="wordCount">0</span></div>
 
-<header class="fade-in">
-  <h1 class="header-title">
-    <span class="emoji-mov">✨</span> 
-    <span class="typewriter">DETECTIVES LITERARIOS</span> 
-    <span class="emoji-mov">✨</span>
-  </h1>
-  <p class="header-subtitle">Donde las palabras cobran vida y los misterios esperan ser descubiertos</p>
+<div id="cur"></div>
+<div id="curRing"></div>
+
+<div class="bg-fixed-wrap">
+  <div class="bg-base"></div>
+  <div class="bg-hex"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-rays"></div>
+  <div class="bg-aurora"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-vignette"></div>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+  <canvas id="bgCanvas"></canvas>
+  <div class="css-stars" id="cssStars"></div>
+</div>
+
+<div class="wc">Palabras descubiertas: <span id="wc">0</span></div>
+
+<header>
+  <div class="deco-line"></div>
+  <div class="title-wrap">
+    <i class="star-icon">✦</i>
+    <span class="title-3d">DETECTIVES LITERARIOS</span>
+    <i class="star-icon">✦</i>
+  </div>
+  <p class="subtitle">Donde las palabras cobran vida y los misterios esperan ser descubiertos</p>
+  <div class="deco-line" style="animation-delay:.6s;margin-top:22px;"></div>
 </header>
 
 <main>
-  <div class="card slide-up crystal-distort" style="animation-delay: 0.2s;">
-    <img
-      src="https://i.ibb.co/SXpJdP74/01.jpg"
-      alt="Logo Institución Educativa"
-      class="logo-institucion hover-lift"
-    />
-    <p class="texto-bienvenida">
-      <span class="emoji-mov">📚</span> Bienvenid@ a nuestra aventura literaria,
-      donde cada página esconde secretos por descubrir y cada palabra tiene el poder de 
-      transportarte a mundos inexplorados. Únete a nuestra comunidad de exploradores literarios
-      <span class="emoji-mov">🖊️</span><span class="emoji-mov">🌐</span>
-    </p>
-    
-    <div class="btn-container">
-      <button class="social hover-lift" onclick="window.open('https://www.instagram.com/detectives_literarios/', '_blank')">
-        <span class="emoji-mov">📸</span> Instagram
+  <div class="card" style="animation-delay:.1s">
+    <img src="https://i.ibb.co/SXpJdP74/01.jpg" alt="Logo" class="logo-inst" decoding="async"/>
+    <p class="welcome-text">✦ Bienvenid@ a nuestra aventura literaria, donde cada página esconde secretos por descubrir y cada palabra tiene el poder de transportarte a mundos inexplorados. Únete a nuestra comunidad de exploradores literarios ✦</p>
+    <div class="btn-row">
+      <button class="btn-s btn-ig" onclick="window.open('https://www.instagram.com/detectives_literarios/','_blank')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg>
+        Instagram
       </button>
-      <button class="social hover-lift" onclick="window.open('https://www.facebook.com/profile.php?id=61577592861536', '_blank')">
-        <span class="emoji-mov">📘</span> Facebook
+      <button class="btn-s btn-fb" onclick="window.open('https://www.facebook.com/profile.php?id=61577592861536','_blank')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
       </button>
-      <button class="social hover-lift" onclick="window.open('https://www.tiktok.com/@detectivesliterarios', '_blank')">
-        <span class="emoji-mov">▶️</span> TikTok
+      <button class="btn-s btn-tt" onclick="window.open('https://www.tiktok.com/@detectivesliterarios','_blank')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.95a8.21 8.21 0 004.79 1.52V7.03a4.85 4.85 0 01-1.02-.34z"/></svg>
+        TikTok
       </button>
     </div>
   </div>
 
-  <div class="card slide-up crystal-distort" style="animation-delay: 0.4s;">
-    <img
-      src="https://i.ibb.co/wN4XVsgN/institucion.jpg"
-      alt="Escudo Institución"
-      class="logo-escudo hover-lift"
-    />
-    
-    <div class="navigation-section">
-      <h3><span class="emoji-mov">🔍</span> Explora Nuestro Mundo Literario</h3>
-      
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div>
-              <span class="emoji-mov" style="font-size: 2rem;">📋</span>
-              <h4>Descripción del Proyecto</h4>
-              <p>Conoce nuestra misión</p>
-            </div>
-          </div>
-          <div class="flip-card-back">
-            <div>
-              <h4>🎯 Nuestra Misión</h4>
-              <p>Un proyecto educativo que promueve la lectura crítica, la investigación literaria y el desarrollo de competencias comunicativas en nuestra comunidad estudiantil.</p>
-            </div>
-          </div>
-        </div>
+  <div class="card" style="animation-delay:.22s">
+    <img src="https://i.ibb.co/wN4XVsgN/institucion.jpg" alt="Escudo" class="logo-escu" decoding="async"/>
+    <h3 class="sec-title">✦ Explora Nuestro Mundo Literario ✦</h3>
+
+    <div class="flip" onclick="location.href='https://whitheitsblak.github.io/Descripcion-del-Proyecto/'">
+      <div class="flip-inner">
+        <div class="flip-f"><div><span class="fi">📋</span><h4>Descripción del Proyecto</h4><p>Conoce nuestra misión</p></div></div>
+        <div class="flip-b"><div><h4>✦ Nuestra Misión</h4><p>Un proyecto educativo que promueve la lectura crítica, la investigación literaria y el desarrollo de competencias comunicativas.</p></div></div>
       </div>
-      
-      <div class="flip-card biblioteca" onclick="window.location.href='https://whitheitsblak.github.io/BiblotecaLiteraria/'">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div>
-              <span class="emoji-mov" style="font-size: 2rem;">📖</span>
-              <h4>Biblioteca Virtual</h4>
-              <p>Descubre nuestra colección</p>
-            </div>
-          </div>
-          <div class="flip-card-back">
-            <div>
-              <h4>📚 Libros Disponibles</h4>
-              <p>Más de 500 títulos esperándote. Desde clásicos hasta novelas contemporáneas que desafiarán tu imaginación. ¡Haz clic para explorar!</p>
-            </div>
-          </div>
-        </div>
+    </div>
+
+    <div class="flip bib" onclick="location.href='https://whitheitsblak.github.io/BiblotecaLiteraria/'">
+      <div class="flip-inner">
+        <div class="flip-f"><div><span class="fi">📖</span><h4>Biblioteca Virtual</h4><p>Descubre nuestra colección</p></div></div>
+        <div class="flip-b"><div><h4>✦ Libros Disponibles</h4><p>Más de 500 títulos esperándote. Desde clásicos hasta novelas contemporáneas que desafiarán tu imaginación.</p></div></div>
       </div>
-      
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div>
-              <span class="emoji-mov" style="font-size: 2rem;">📰</span>
-              <h4>Periódico Institucional</h4>
-              <p>Noticias y artículos literarios</p>
-            </div>
-          </div>
-          <div class="flip-card-back">
-            <div>
-              <h4>📝 Publicaciones</h4>
-              <p>Lee las últimas noticias, entrevistas a autores, reseñas de eventos literarios y artículos escritos por nuestros estudiantes detectives.</p>
-            </div>
-          </div>
-        </div>
+    </div>
+
+    <div class="flip" onclick="location.href='https://drive.google.com/file/d/1fxyiT8jA1s8LRenL1gCiIv8UQ6_txMGG/view?usp=drive_link'">
+      <div class="flip-inner">
+        <div class="flip-f"><div><span class="fi">📰</span><h4>Periódico Institucional</h4><p>Noticias y artículos literarios</p></div></div>
+        <div class="flip-b"><div><h4>✦ Publicaciones</h4><p>Lee las últimas noticias, entrevistas a autores, reseñas de eventos y artículos escritos por nuestros estudiantes detectives.</p></div></div>
       </div>
-      
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div>
-              <span class="emoji-mov" style="font-size: 2rem;">📊</span>
-              <h4>Infografía</h4>
-              <p>Datos visuales literarios</p>
-            </div>
-          </div>
-          <div class="flip-card-back">
-            <div>
-              <h4>🎨 Contenido Visual</h4>
-              <p>Explora infografías creativas sobre géneros literarios, líneas de tiempo de autores, estadísticas de lectura y más recursos visuales educativos.</p>
-            </div>
-          </div>
-        </div>
+    </div>
+
+    <div class="flip" onclick="location.href='https://drive.google.com/file/d/1kP0tp58jx0Wm71amVz0pJXFyah7owWAD/view?usp=drive_link'">
+      <div class="flip-inner">
+        <div class="flip-f"><div><span class="fi">📊</span><h4>Infografía</h4><p>Datos visuales literarios</p></div></div>
+        <div class="flip-b"><div><h4>✦ Contenido Visual</h4><p>Infografías creativas sobre géneros literarios, líneas de tiempo de autores y estadísticas de lectura.</p></div></div>
       </div>
-      
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div>
-              <span class="emoji-mov" style="font-size: 2rem;">🖼️</span>
-              <h4>Galería Literaria</h4>
-              <p>Imágenes de nuestras actividades</p>
-            </div>
-          </div>
-          <div class="flip-card-back">
-            <div>
-              <h4>📸 Momentos Especiales</h4>
-              <p>Descubre fotografías de nuestros clubes de lectura, presentaciones de libros, talleres creativos y eventos literarios institucionales.</p>
-            </div>
-          </div>
-        </div>
+    </div>
+
+    <div class="flip" onclick="location.href='https://whitheitsblak.github.io/Galeria-Literaria/'">
+      <div class="flip-inner">
+        <div class="flip-f"><div><span class="fi">🖼️</span><h4>Galería Literaria</h4><p>Imágenes de nuestras actividades</p></div></div>
+        <div class="flip-b"><div><h4>✦ Momentos Especiales</h4><p>Fotografías de clubes de lectura, talleres creativos y eventos literarios institucionales.</p></div></div>
       </div>
     </div>
   </div>
 
-  <div class="card slide-up" style="animation-delay: 0.6s; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(129, 199, 132, 0.3)); border: 2px solid rgba(76, 175, 80, 0.4); margin-top: 50px;">
-    <p style="font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1.8; font-weight: 600; color: #2e7d32; text-align: center; font-style: italic; text-shadow: 2px 2px 4px rgba(255,255,255,0.8); padding: 20px;">
-      <span class="emoji-mov" style="font-size: 2.5rem;">✨</span><br>
-      "En cada lector rebelde, la literatura se vive como un espejo del alma del sur: una voz que reescribe el mundo y sueña otros horizontes posibles."
-      <br><span class="emoji-mov" style="font-size: 2.5rem;">📚</span>
-    </p>
+  <div class="quote-card" style="text-align:center;">
+    <p class="quote-text" style="text-align:center;">"En cada lector rebelde, la literatura se vive como un espejo del alma del sur: una voz que reescribe el mundo y sueña otros horizontes posibles."</p>
+    <div class="quote-rule"></div>
   </div>
+
+  <!-- QR CODE SECTION -->
+  <div class="qr-section">
+
+    <!-- Top decorative bar -->
+    <div class="qr-top-deco">
+      <div class="qr-deco-line"></div>
+      <span class="qr-deco-diamond">◆</span>
+      <div class="qr-deco-line"></div>
+    </div>
+
+    <h3 class="qr-title">Únete al Universo</h3>
+    <p class="qr-subtitle">Escanea y descubre todo nuestro mundo literario</p>
+
+    <div class="qr-stage">
+      <!-- Corner ornaments -->
+      <div class="qr-corner qr-tl"></div>
+      <div class="qr-corner qr-tr"></div>
+      <div class="qr-corner qr-bl"></div>
+      <div class="qr-corner qr-br"></div>
+
+      <!-- Rotating ring -->
+      <div class="qr-ring-outer"></div>
+      <div class="qr-ring-inner"></div>
+
+      <!-- The QR frame -->
+      <div class="qr-frame">
+        <div id="qr-container">
+          <img src="https://i.ibb.co/1JLDxVvG/qr-code-1.png" alt="Código QR Detectives Literarios" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block;" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <!-- Scan line animation -->
+      <div class="qr-scanline"></div>
+    </div>
+
+    <!-- Bottom info pills -->
+    <div class="qr-pills">
+      <span class="qr-pill">📚 Biblioteca</span>
+      <span class="qr-pill">🔍 Proyectos</span>
+      <span class="qr-pill">🖼️ Galería</span>
+    </div>
+
+    <p class="qr-hint">
+      <span class="qr-hint-icon">↑</span>
+      Apunta la cámara de tu celular al código
+    </p>
+
+  </div>
+
 </main>
 
-<footer class="fade-in" style="animation-delay: 0.8s;">
-  <div class="footer-content">
-    <div class="footer-title">
-      <span class="emoji-mov">🎓</span> Proyecto Educativo Literario
-    </div>
-    <div class="footer-info">
-      <strong>Desarrollado por:</strong> WhitheItsBlak<br />
-      <strong>Proyecto dirigido por:</strong> Jasmín Muñoz Narváez<br />
-      <strong>Docente de Castellano</strong><br />
-      IEM Ciudad de Pasto - CCP<br />
-      <strong>Jornada:</strong> JM
-    </div>
+<footer>
+  <div class="footer-rule"></div>
+  <div class="footer-title">✦ Proyecto Educativo Literario ✦</div>
+  <div class="footer-info">
+    <strong>Desarrollado por:</strong> WhitheItsBlak<br/>
+    <strong>Proyecto dirigido por:</strong> Jasmín Muñoz Narváez<br/>
+    <strong>Docente de Castellano</strong><br/>
+    IEM Ciudad de Pasto — CCP<br/>
+    <strong>Jornada:</strong> JM
   </div>
 </footer>
 
 <script>
-  // Canvas de fondo mejorado
-  const canvas = document.getElementById("fondoCanvas");
-  const ctx = canvas.getContext("2d");
-  let width, height;
+// ─── DETECT MOBILE ───
+// Incluye iPads modernos: desde iPadOS 13 se identifican como "Macintosh"
+// en el user agent, así que se detectan por pantalla táctil + plataforma Mac.
+const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+  || window.innerWidth <= 768
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-  const colors = [
-    "rgba(76, 175, 80, 0.3)",
-    "rgba(102, 187, 106, 0.4)", 
-    "rgba(129, 199, 132, 0.3)",
-    "rgba(165, 214, 167, 0.5)",
-    "rgba(200, 230, 201, 0.4)"
-  ];
-  const particles = [];
+// ─── DETECT IN-APP BROWSERS (WhatsApp, Instagram, Facebook, TikTok, Line...) ───
+// Estos "mini navegadores" dentro de la app suelen ser mucho más lentos
+// dibujando canvas por JS y a veces rompen position:fixed. Cuando se
+// detectan, se apaga el canvas de partículas y se usa un reemplazo 100% CSS.
+const isEmbeddedBrowser = /WhatsApp|Instagram|FBAN|FBAV|FB_IAB|Line\/|MicroMessenger|TikTok|musical_ly|Snapchat/i.test(navigator.userAgent);
 
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.radius = Math.random() * 3 + 1;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.speedX = (Math.random() - 0.5) * 0.5;
-      this.speedY = (Math.random() - 0.5) * 0.5;
-      this.opacity = Math.random() * 0.5 + 0.2;
-      this.pulseSpeed = Math.random() * 0.02 + 0.01;
-      this.pulse = 0;
-    }
-    
-    move() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.pulse += this.pulseSpeed;
-      
-      if (this.x > width) this.x = 0;
-      if (this.x < 0) this.x = width;
-      if (this.y > height) this.y = 0;
-      if (this.y < 0) this.y = height;
-    }
-    
-    draw() {
-      const currentOpacity = this.opacity + Math.sin(this.pulse) * 0.2;
-      ctx.globalAlpha = currentOpacity;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulse) * 0.5, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-  }
-
-  function initParticles(num) {
-    particles.length = 0;
-    for (let i = 0; i < num; i++) {
-      particles.push(new Particle());
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    particles.forEach((p) => {
-      p.move();
-      p.draw();
-    });
-    requestAnimationFrame(animate);
-  }
-
-  // Efectos de conexión entre partículas
-  function drawConnections() {
-    particles.forEach((p1, i) => {
-      particles.slice(i + 1).forEach((p2) => {
-        const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-        if (distance < 150) {
-          ctx.globalAlpha = (150 - distance) / 150 * 0.1;
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = "rgba(76, 175, 80, 0.5)";
-          ctx.lineWidth = 1;
-          ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-      });
-    });
-  }
-
-  function enhancedAnimate() {
-    ctx.clearRect(0, 0, width, height);
-    particles.forEach((p) => {
-      p.move();
-      p.draw();
-    });
-    drawConnections();
-    requestAnimationFrame(enhancedAnimate);
-  }
-
-  window.addEventListener("resize", () => {
-    resize();
-    initParticles(120);
+// ─── CURSOR (desktop only) ───
+if (!isMobile) {
+  const cur=document.getElementById('cur'), ring=document.getElementById('curRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function aR(){ rx+=(mx-rx)*.11; ry+=(my-ry)*.11; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(aR); })();
+  document.querySelectorAll('button,.flip,img').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ cur.style.width='18px'; cur.style.height='18px'; });
+    el.addEventListener('mouseleave',()=>{ cur.style.width='10px'; cur.style.height='10px'; });
   });
+} else {
+  document.getElementById('cur').style.display='none';
+  document.getElementById('curRing').style.display='none';
+  document.body.style.cursor='auto';
+}
 
-  // Variables globales para efectos
-  let mouseX = 0, mouseY = 0;
-  let trailArray = [];
-  let wordCount = 0;
-  let quotesShown = 0;
-  
-  // Frases motivacionales literarias
-  const motivationalQuotes = [
-    "📚 'La lectura es el viaje de los que no pueden tomar el tren' - Francis de Croisset",
-    "✨ 'Un libro abierto es un cerebro que habla; cerrado, un amigo que espera'",
-    "🌟 'Leer es soñar con los ojos abiertos' - Anónimo",
-    "📖  'Los libros son espejos: solo se ve en ellos lo que uno ya lleva dentro'",
-    "🎭 'La literatura es el arte de descubrir algo extraordinario sobre gente ordinaria'",
-    "🌙 'Leer un buen libro es como conversar con las mejores mentes del pasado'"
-  ];
+// ─── MOBILE: disable heavy background effects ───
+if (isMobile) {
+  // Kill aurora spin (GPU-heavy conic gradient rotation)
+  document.querySelector('.bg-aurora').style.animation = 'none';
+  // Kill orb c
+  document.querySelector('.orb-c').style.display = 'none';
+  // Remove parallax canvas transform completely — this was causing the zoom/shrink on scroll
+  // Canvas stays fixed — NO transform on scroll
+}
 
-  // Textos para burbujas de lectura
-  const readingBubbles = [
-    "Leyendo...", "Descubriendo...", "Explorando...", "Investigando...", 
-    "Analizando...", "Reflexionando...", "Imaginando...", "Creando..."
-  ];
+// ─── CANVAS ───
+const cv=document.getElementById('bgCanvas'), ctx=cv.getContext('2d');
+let W,H;
+function rsz(){ W=cv.width=innerWidth; H=cv.height=innerHeight; }
+rsz(); window.addEventListener('resize',rsz);
 
-  // Efectos de mouse mejorados
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    // Rastro de brillos
-    if (Math.random() < 0.3) {
-      createMagicTrail(mouseX, mouseY);
-    }
-    
-    // Partícula mágica original (menos frecuente)
-    if (Math.random() < 0.05) {
-      createMagicParticle(mouseX, mouseY);
-    }
-  });
+const pal=[
+  [26,143,82],[35,184,110],[63,224,142],[127,255,196],[184,255,224],
+  [10,74,40],[212,168,67],[17,102,56],[77,210,160],[50,200,130]
+];
 
-  // Ondas al hacer clic
-  document.addEventListener('click', (e) => {
-    createClickWave(e.clientX, e.clientY);
-    createExplosion(e.clientX, e.clientY);
-    incrementWordCount();
-  });
-
-  // Funciones de efectos
-  function createClickWave(x, y) {
-    const wave = document.createElement('div');
-    wave.className = 'click-wave';
-    wave.style.left = (x - 150) + 'px';
-    wave.style.top = (y - 150) + 'px';
-    document.body.appendChild(wave);
-    
-    setTimeout(() => {
-      if (wave.parentNode) wave.parentNode.removeChild(wave);
-    }, 1000);
+// ─── NAVEGADORES EMBEBIDOS: reemplazar el canvas por estrellas CSS ───
+// Nada de JS corriendo por frame — solo animation de opacity/transform,
+// que el navegador compone en la GPU. Elimina de raíz el lag reportado
+// dentro de WhatsApp/Instagram/etc.
+if (isEmbeddedBrowser) {
+  cv.style.display = 'none';
+  const wrap = document.getElementById('cssStars');
+  const CSS_STAR_COUNT = 16;
+  for (let i = 0; i < CSS_STAR_COUNT; i++) {
+    const s = document.createElement('div');
+    s.className = 'css-star';
+    const size = (Math.random() * 2.2 + 1).toFixed(1);
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.animationDuration = (2.5 + Math.random() * 3) + 's';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    wrap.appendChild(s);
   }
+} else {
+  // Menos partículas en móvil que antes (pedido explícito: quitar las que causan lag)
+  const STAR_COUNT = isMobile ? 34 : 180;
+  const MIST_COUNT = isMobile ? 0  : 40;  // no mist on mobile (saves a lot)
+  const DRAW_LINES = !isMobile;
+  const DRAW_HALOS = !isMobile;
 
-  function createExplosion(x, y) {
-    for (let i = 0; i < 12; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'explosion-particle';
-      
-      const angle = (i / 12) * Math.PI * 2;
-      const distance = 50 + Math.random() * 50;
-      const finalX = x + Math.cos(angle) * distance;
-      const finalY = y + Math.sin(angle) * distance;
-      
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-      
-      document.body.appendChild(particle);
-      
-      // Animar hacia la posición final
-      particle.animate([
-        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-        { transform: `translate(${finalX - x}px, ${finalY - y}px) scale(0)`, opacity: 0 }
-      ], {
-        duration: 1500,
-        easing: 'ease-out'
-      });
-      
-      setTimeout(() => {
-        if (particle.parentNode) particle.parentNode.removeChild(particle);
-      }, 1500);
+  class Star {
+    constructor(){ this.init(); }
+    init(){
+      this.x=Math.random()*W; this.y=Math.random()*H;
+      this.r=Math.random()*1.6+0.3;
+      const c=pal[Math.floor(Math.random()*pal.length)];
+      this.cr=c[0]; this.cg=c[1]; this.cb=c[2];
+      this.fill=`rgb(${this.cr},${this.cg},${this.cb})`;
+      this.op=Math.random()*.45+.12;
+      this.vx=(Math.random()-.5)*.25; this.vy=-(Math.random()*.4+.08);
+      this.ph=Math.random()*Math.PI*2; this.ps=Math.random()*.012+.004;
+    }
+    tick(){ this.x+=this.vx; this.y+=this.vy; this.ph+=this.ps; if(this.y<-4){this.y=H+4;this.x=Math.random()*W;} if(this.x<-4||this.x>W+4)this.init(); }
+    draw(){
+      const o=this.op*(0.65+0.35*Math.sin(this.ph));
+      const r1=Math.max(0.1, this.r+Math.sin(this.ph)*.4);
+      ctx.globalAlpha=o;
+      ctx.beginPath(); ctx.arc(this.x,this.y,r1,0,Math.PI*2);
+      ctx.fillStyle=this.fill; ctx.fill();
+      if(DRAW_HALOS && this.op>.35){ ctx.globalAlpha=o*.22; ctx.beginPath(); ctx.arc(this.x,this.y,Math.max(0.1,(this.r+.4)*2.5),0,Math.PI*2); ctx.fillStyle=this.fill; ctx.fill(); }
     }
   }
 
-  function createMagicTrail(x, y) {
-    const trail = document.createElement('div');
-    trail.className = 'magic-trail';
-    trail.style.left = x + 'px';
-    trail.style.top = y + 'px';
-    trail.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]}, transparent)`;
-    
-    document.body.appendChild(trail);
-    
-    setTimeout(() => {
-      if (trail.parentNode) trail.parentNode.removeChild(trail);
-    }, 1000);
+  class Mist {
+    constructor(){ this.reset(); this.y=Math.random()*H; this.life=Math.random()*300; }
+    reset(){
+      this.x=Math.random()*W; this.y=H+30;
+      this.r=Math.random()*6+3;
+      this.vx=(Math.random()-.5)*.3; this.vy=-(Math.random()*.5+.15);
+      this.life=0; this.maxLife=Math.random()*350+200;
+      const c=pal[Math.floor(Math.random()*pal.length)];
+      this.cr=c[0]; this.cg=c[1]; this.cb=c[2];
+      this.fill=`rgb(${this.cr},${this.cg},${this.cb})`;
+    }
+    tick(){ this.x+=this.vx; this.y+=this.vy; this.life++; if(this.life>this.maxLife||this.y<-30)this.reset(); }
+    draw(){
+      const fade=Math.sin(this.life/this.maxLife*Math.PI);
+      ctx.globalAlpha=.15*fade; ctx.beginPath(); ctx.arc(this.x,this.y,Math.max(0.1,this.r),0,Math.PI*2); ctx.fillStyle=this.fill; ctx.fill();
+      ctx.globalAlpha=.06*fade; ctx.beginPath(); ctx.arc(this.x,this.y,Math.max(0.1,this.r*3),0,Math.PI*2); ctx.fillStyle=this.fill; ctx.fill();
+    }
   }
 
-  function createShootingStar() {
-    const star = document.createElement('div');
-    star.className = 'shooting-star';
-    star.style.left = '-100px';
-    star.style.top = Math.random() * (window.innerHeight / 2) + 'px';
-    
-    document.body.appendChild(star);
-    
-    setTimeout(() => {
-      if (star.parentNode) star.parentNode.removeChild(star);
-    }, 3000);
+  const stars=Array.from({length:STAR_COUNT},()=>new Star());
+  const mists=MIST_COUNT>0 ? Array.from({length:MIST_COUNT},()=>new Mist()) : [];
+
+  function drawLines(){
+    if(!DRAW_LINES) return;
+    const vis=mists.filter(m=>m.life>10&&m.life<m.maxLife-10);
+    for(let i=0;i<vis.length;i++) for(let j=i+1;j<vis.length;j++){
+      const dx=vis[i].x-vis[j].x,dy=vis[i].y-vis[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130){ ctx.globalAlpha=(1-d/130)*.045; ctx.beginPath(); ctx.moveTo(vis[i].x,vis[i].y); ctx.lineTo(vis[j].x,vis[j].y); ctx.strokeStyle='rgba(63,224,142,.8)'; ctx.lineWidth=.6; ctx.stroke(); }
+    }
+    ctx.globalAlpha=1;
   }
 
-  function createReadingBubble() {
-    const bubble = document.createElement('div');
-    bubble.className = 'reading-bubble';
-    bubble.textContent = readingBubbles[Math.floor(Math.random() * readingBubbles.length)];
-    bubble.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-    bubble.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-    
-    document.body.appendChild(bubble);
-    
-    setTimeout(() => {
-      if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
-    }, 4000);
+  // On mobile: pause canvas during scroll to prevent jank
+  let isScrolling = false;
+  let scrollTimer = null;
+  if (isMobile) {
+    window.addEventListener('scroll', () => {
+      isScrolling = true;
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => { isScrolling = false; }, 150);
+    }, { passive: true });
   }
 
-  function showMotivationalQuote() {
-    if (quotesShown >= motivationalQuotes.length) return;
-    
-    const quote = document.createElement('div');
-    quote.className = 'motivational-quote';
-    quote.textContent = motivationalQuotes[quotesShown];
-    
-    document.body.appendChild(quote);
-    quotesShown++;
-    
-    setTimeout(() => {
-      if (quote.parentNode) quote.parentNode.removeChild(quote);
-    }, 5000);
+  let frameSkip = 0;
+  (function frame(){
+    requestAnimationFrame(frame);
+    // Pause completely while scrolling on mobile
+    if (isMobile && isScrolling) return;
+    // Skip every other frame on mobile
+    if (isMobile) { frameSkip++; if (frameSkip % 2 !== 0) return; }
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{s.tick();s.draw();});
+    mists.forEach(m=>{m.tick();m.draw();});
+    drawLines();
+    ctx.globalAlpha=1;
+  })();
+}
+
+// ─── CLICK EFFECTS ───
+let wc=0; const wcEl=document.getElementById('wc');
+document.addEventListener('click',e=>{ makeRipple(e.clientX,e.clientY); if(!isMobile) makeSparks(e.clientX,e.clientY); wc+=Math.floor(Math.random()*6)+1; wcEl.textContent=wc; });
+function makeRipple(x,y){ const d=document.createElement('div'); d.className='ripple'; d.style.left=x+'px'; d.style.top=y+'px'; document.body.appendChild(d); setTimeout(()=>d.remove(),700); }
+function makeSparks(x,y){
+  const clrs=['#3de08e','#7fffc4','#23b86e','#b8ffe0','#d4a843'];
+  for(let i=0;i<10;i++){
+    const s=document.createElement('div'); s.className='spark';
+    const angle=(i/10)*Math.PI*2, dist=35+Math.random()*45;
+    s.style.cssText=`left:${x}px;top:${y}px;width:${3+Math.random()*4}px;height:${3+Math.random()*4}px;background:${clrs[Math.floor(Math.random()*clrs.length)]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;box-shadow:0 0 8px currentColor`;
+    document.body.appendChild(s); setTimeout(()=>s.remove(),1200);
   }
+}
 
-  function incrementWordCount() {
-    wordCount += Math.floor(Math.random() * 5) + 1;
-    document.getElementById('wordCount').textContent = wordCount;
-  }
+// ─── COMETS (reduced on mobile, off on embedded browsers) ───
+function spawnComet(){ const c=document.createElement('div'); c.className='comet'; c.style.left='0px'; c.style.top=(Math.random()*H*.55)+'px'; document.body.appendChild(c); setTimeout(()=>c.remove(),5000); }
+if (!isEmbeddedBrowser) {
+  setInterval(spawnComet, isMobile ? 14000 : 5500);
+}
 
-  function createMagicParticle(x, y) {
-    const particle = document.createElement('div');
-    particle.className = 'magic-particle';
-    particle.style.left = x + 'px';
-    particle.style.top = y + 'px';
-    particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]}, transparent)`;
-    
-    document.body.appendChild(particle);
-    
-    setTimeout(() => {
-      if (particle.parentNode) particle.parentNode.removeChild(particle);
-    }, 2000);
-  }
+// ─── BUBBLES (disabled on mobile to reduce DOM churn) ───
+if (!isMobile) {
+  const bubTxt=['Leyendo…','Descubriendo…','Explorando…','Imaginando…','Reflexionando…','Investigando…'];
+  function spawnBubble(){ const b=document.createElement('div'); b.className='bubble'; b.textContent=bubTxt[Math.floor(Math.random()*bubTxt.length)]; b.style.left=(Math.random()*(innerWidth-180))+'px'; b.style.top=(Math.random()*(innerHeight-60))+'px'; document.body.appendChild(b); setTimeout(()=>b.remove(),4000); }
+  setInterval(spawnBubble,6500);
+}
 
-  // Intervalos para efectos automáticos
-  setInterval(createShootingStar, 3000);
-  setInterval(createReadingBubble, 5000);
-  setInterval(showMotivationalQuote, 15000);
-  setInterval(() => {
-    wordCount += Math.floor(Math.random() * 3) + 1;
-    document.getElementById('wordCount').textContent = wordCount;
-  }, 2000);
+// ─── QUOTES ───
+const quotes=['"La lectura es el viaje de los que no pueden tomar el tren." — Francis de Croisset','"Un libro abierto es un cerebro que habla; cerrado, un amigo que espera."','"Leer es soñar con los ojos abiertos."','"Los libros son espejos: solo se ve en ellos lo que uno ya lleva dentro."','"La literatura es el arte de descubrir algo extraordinario en gente ordinaria."'];
+let qi=0;
+function showQuote(){ const q=document.createElement('div'); q.className='quote-pop'; q.textContent=quotes[qi%quotes.length]; qi++; document.body.appendChild(q); setTimeout(()=>q.remove(),5000); }
+if (!isMobile) {
+  setTimeout(showQuote, 9000);
+  setInterval(showQuote, 20000);
+}
 
-  // Parallax mejorado
+// ─── AUTO COUNTER ───
+setInterval(()=>{ wc+=Math.floor(Math.random()*3)+1; wcEl.textContent=wc; },2800);
+
+// ─── PARALLAX: desktop only ───
+if (!isMobile) {
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallax1 = scrolled * 0.5;
-    const parallax2 = scrolled * 0.3;
-    
-    canvas.style.transform = `translateY(${parallax1}px)`;
-    document.querySelector('.aurora').style.transform = `translateY(${parallax2}px)`;
-  });
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const s = pageYOffset;
+        cv.style.transform = `translateY(${s * .35}px)`;
+        document.querySelectorAll('.orb').forEach((o, i) => {
+          o.style.transform = `translateY(${s * (.12 + i * .04)}px)`;
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+}
 
-  // Inicialización
-  resize();
-  initParticles(120);
-  enhancedAnimate();
+// ─── TOUCH FLIP CARDS ───
+// Usar touchstart/touchend para distinguir tap vs scroll sin bloquear el scroll
+document.querySelectorAll('.flip').forEach(card => {
+  let touchStartY = 0;
+  let touchStartTime = 0;
 
-  // Efectos de scroll
-  window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallax = scrolled * 0.5;
-    canvas.style.transform = `translateY(${parallax}px)`;
-  });
+  card.addEventListener('touchstart', function(e) {
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true }); // passive:true = nunca bloquea el scroll
 
-  // Animaciones de entrada
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
+  card.addEventListener('touchend', function(e) {
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaY = Math.abs(touchEndY - touchStartY);
+    const elapsed = Date.now() - touchStartTime;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.animationPlayState = 'running';
-      }
-    });
-  }, observerOptions);
+    // Solo es un tap si: se movió menos de 10px Y duró menos de 300ms
+    if (deltaY < 10 && elapsed < 300) {
+      const inner = this.querySelector('.flip-inner');
+      const isFlipped = inner.style.transform === 'rotateY(180deg)';
+      inner.style.transform = isFlipped ? '' : 'rotateY(180deg)';
+    }
+  }, { passive: true });
+});
 
-  document.querySelectorAll('.slide-up').forEach(el => {
-    observer.observe(el);
-  });
 </script>
 </body>
 </html>
