@@ -194,11 +194,12 @@
     50%{transform:translateY(-8px) perspective(600px) rotateX(3deg);}
   }
   .title-3d::after {
-    content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+    content:''; position:absolute; top:0; left:0; width:60%; height:100%;
     background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
     animation:shimmerTitle 4s ease-in-out infinite; pointer-events:none;
+    will-change:transform;
   }
-  @keyframes shimmerTitle { 0%{left:-100%;} 60%,100%{left:150%;} }
+  @keyframes shimmerTitle { 0%{transform:translateX(-166%);} 60%,100%{transform:translateX(250%);} }
 
   .subtitle {
     font-family:'Cormorant Garamond',serif;
@@ -718,6 +719,7 @@
     }
     /* Quitar animación del título en móvil (libera CPU) */
     .title-3d { animation: none !important; }
+    .title-3d::after { animation: none !important; display:none; }
     .star-icon { animation: none !important; }
     /* Simplificar sombras de cards */
     .card {
@@ -725,6 +727,9 @@
     }
     /* Quitar anillos giratorios del QR en móvil */
     .qr-ring-outer, .qr-ring-inner { animation: none !important; }
+    /* Quitar la línea de escaneo del QR — animaba "top" (layout), no transform;
+       era la única animación continua que quedaba sin optimizar en móvil */
+    .qr-scanline { animation: none !important; opacity: 0.6; top: 50%; }
     /* Orb más ligero */
     .orb-a, .orb-b { animation: none !important; }
   }
@@ -879,7 +884,7 @@
       <!-- The QR frame -->
       <div class="qr-frame">
         <div id="qr-container">
-          <img src="https://i.ibb.co/1JLDxVvG/qr-code-1.png" alt="Código QR Detectives Literarios" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block;" loading="lazy" decoding="async" />
+          <img src="https://i.ibb.co/zhnWzbdM/qr-code.png" alt="Código QR Detectives Literarios" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block;" loading="lazy" decoding="async" />
         </div>
       </div>
 
